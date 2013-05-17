@@ -29,12 +29,28 @@ import android.text.Spanned;
 import lrstudios.games.ego.lib.Utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.util.Properties;
 
 
 public class AndroidUtils {
 
     private static DialogInterface.OnClickListener _emptyDialogOnClickListener;
+
+
+    public static Properties loadPropertiesFromAssets(Context context, String fileName) throws IOException {
+        Properties props = new Properties();
+        InputStream stream = null;
+        try {
+            stream = context.getResources().getAssets().open(fileName);
+            props.load(stream);
+        }
+        finally {
+            Utils.closeObject(stream);
+        }
+        return props;
+    }
 
     public static InputFilter getFilenameInputFilter() {
         return new InputFilter() {

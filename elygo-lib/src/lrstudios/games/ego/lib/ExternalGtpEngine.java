@@ -39,7 +39,8 @@ public abstract class ExternalGtpEngine extends GtpEngine {
         _properties = properties;
         try {
             if (!_isRunning) {
-                String[] processArgs = getProcessArgs();
+                String propArgs = properties.getProperty("process_args");
+                String[] processArgs = (propArgs == null) ? getProcessArgs() : propArgs.split(" ");
                 int len = processArgs.length;
                 String[] args = new String[len + 1];
                 args[0] = getEngineFile().getAbsolutePath();
@@ -101,6 +102,36 @@ public abstract class ExternalGtpEngine extends GtpEngine {
         return true;
     }
 
+    /**
+     * Restarts the engine process with the same properties given to the last init() call.
+     */
+    public boolean restart() {
+        return init(_properties);
+    }
+
+    /**
+     * Clears the board and send commands to the engine to replay the whole game.
+     */
+    public void replayGame() throws IOException {
+        GoGame game = getGame();
+        _intSendGtpCommand("clear_board");
+        _intSendGtpCommand("boardsize " + game.board.getSize());
+        _intSendGtpCommand("komi " + ((int) (game.info.komi * 10.0) / 10.0));
+        if (game.info.handicap > 0)
+            _intSendGtpCommand("fixed_handicap " + game.info.handicap);
+
+        GameNode node = game.getBaseNode();
+        while (node.nextNodes.size() > 0) {
+            GameNode nextNode = node.nextNodes.get(0);
+            if (nextNode.color != GoBoard.EMPTY) {
+                _intSendGtpCommand(String.format("play %s %s",
+                        _getColorString(nextNode.color), _point2str(nextNode.x, nextNode.y)));
+            }
+            node = nextNode;
+        }
+    }
+
+
     @Override
     public String sendGtpCommand(String command) {
         try {
@@ -110,24 +141,10 @@ public abstract class ExternalGtpEngine extends GtpEngine {
             e.printStackTrace();
             // An IOException means that Android killed the process, so we start it
             // again and replay the whole game
-            if (init(_properties)) {
+            if (restart()) {
                 try {
-                    GoGame game = getGame();
-                    _intSendGtpCommand("boardsize " + game.board.getSize());
-                    _intSendGtpCommand("komi " + ((int) (game.info.komi * 10.0) / 10.0));
-                    if (game.info.handicap > 0)
-                        _intSendGtpCommand("fixed_handicap " + game.info.handicap);
-
-                    GameNode node = game.getBaseNode();
-                    while (node.nextNodes.size() > 0) {
-                        GameNode nextNode = node.nextNodes.get(0);
-                        if (nextNode.color != GoBoard.EMPTY) {
-                            _intSendGtpCommand(String.format("play %s %s",
-                                    _getColorString(nextNode.color), _point2str(nextNode.x, nextNode.y)));
-                        }
-                        node = nextNode;
-                    }
-                    return _intSendGtpCommand(command); // now send the command again
+                    replayGame();
+                    return _intSendGtpCommand(command);
                 }
                 catch (IOException e2) {
                     Log.e(TAG, "[sendGtpCommand] Unable to restart the engine : cannot replay moves");
@@ -146,16 +163,31 @@ public abstract class ExternalGtpEngine extends GtpEngine {
         Log.v(TAG, "Send: " + command);
         _writer.write(command + "\n");
         _writer.flush();
-        String line;
+        String res;
         char ch;
         do {
-            line = _reader.readLine(); // TODO can return null
-            Log.v(TAG, " >> " + line);
-            if (line == null)
+            res = _reader.readLine();
+            if (res == null)
                 throw new IOException("The process is not running");
-            ch = line.length() > 0 ? line.charAt(0) : 0;
+/*            res += "\n";
+            if (command.contains("list_commands")) { // This is the only multi-line command
+                String line;
+                while ((line = _reader.readLine()).length() > 2)
+                    res += line + "\n";
+                res += "\n";
+            }*/
+            Log.v(TAG, " >> " + res);
+            ch = res.length() > 0 ? res.charAt(0) : 0;
         } while (ch != '=' && ch != '?');
-        return line;
+        return res;
+    }
+
+    public InputStream getInputStream() {
+        return _engineProcess.getInputStream();
+    }
+
+    public OutputStream getOutputStream() {
+        return _engineProcess.getOutputStream();
     }
 
     /**
