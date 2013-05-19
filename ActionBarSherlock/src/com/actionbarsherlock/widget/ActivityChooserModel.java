@@ -34,8 +34,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * <p>
@@ -554,33 +561,7 @@ class ActivityChooserModel extends DataSetObservable {
         }
     }
 
-    private static final SerialExecutor SERIAL_EXECUTOR = new SerialExecutor();
-
-    private static class SerialExecutor implements Executor {
-        final LinkedList<Runnable> mTasks = new LinkedList<Runnable>();
-        Runnable mActive;
-
-        public synchronized void execute(final Runnable r) {
-            mTasks.offer(new Runnable() {
-                public void run() {
-                    try {
-                        r.run();
-                    } finally {
-                        scheduleNext();
-                    }
-                }
-            });
-            if (mActive == null) {
-                scheduleNext();
-            }
-        }
-
-        protected synchronized void scheduleNext() {
-            if ((mActive = mTasks.poll()) != null) {
-                mActive.run();
-            }
-        }
-    }
+    private static final Executor SERIAL_EXECUTOR = Executors.newSingleThreadExecutor();
 
     /**
      * Persists the history data to the backing file if the latter

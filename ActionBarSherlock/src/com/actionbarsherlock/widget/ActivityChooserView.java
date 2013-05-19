@@ -16,6 +16,12 @@
 
 package com.actionbarsherlock.widget;
 
+import android.os.Build;
+import com.actionbarsherlock.R;
+import com.actionbarsherlock.internal.widget.IcsLinearLayout;
+import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
+import com.actionbarsherlock.view.ActionProvider;
+import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,19 +30,18 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.*;
-import com.actionbarsherlock.R;
-import com.actionbarsherlock.internal.widget.IcsLinearLayout;
-import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
-import com.actionbarsherlock.view.ActionProvider;
-import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 /**
  * This class is a view for choosing an activity for handling a given {@link Intent}.
@@ -390,7 +395,11 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         super.onAttachedToWindow();
         ActivityChooserModel dataModel = mAdapter.getDataModel();
         if (dataModel != null) {
-            dataModel.registerObserver(mModelDataSetOberver);
+            try {
+                dataModel.registerObserver(mModelDataSetOberver);
+            } catch (IllegalStateException e) {
+                // Related to #557.
+            }
         }
         mIsAttachedToWindow = true;
     }
@@ -400,7 +409,11 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         super.onDetachedFromWindow();
         ActivityChooserModel dataModel = mAdapter.getDataModel();
         if (dataModel != null) {
-            dataModel.unregisterObserver(mModelDataSetOberver);
+            try {
+                dataModel.unregisterObserver(mModelDataSetOberver);
+            } catch (IllegalStateException e) {
+                //Oh, well... fixes issue #557
+            }
         }
         ViewTreeObserver viewTreeObserver = getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -513,6 +526,9 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
                         mDefaultActionButtonContentDescription, label);
                 mDefaultActivityButton.setContentDescription(contentDescription);
             }
+
+            // Work-around for #415.
+            mAdapter.setShowDefaultActivity(false, false);
         } else {
             mDefaultActivityButton.setVisibility(View.GONE);
         }
@@ -521,6 +537,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             mActivityChooserContent.setBackgroundDrawable(mActivityChooserContentBackground);
         } else {
             mActivityChooserContent.setBackgroundDrawable(null);
+            mActivityChooserContent.setPadding(0, 0, 0, 0);
         }
     }
 
@@ -634,7 +651,8 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
 
         private int mMaxActivityCount = MAX_ACTIVITY_COUNT_DEFAULT;
 
-        private boolean mShowDefaultActivity;
+        // Work-around for #415.
+        private boolean mShowDefaultActivity = true;
 
         private boolean mHighlightDefaultActivity;
 
@@ -643,11 +661,19 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         public void setDataModel(ActivityChooserModel dataModel) {
             ActivityChooserModel oldDataModel = mAdapter.getDataModel();
             if (oldDataModel != null && isShown()) {
-                oldDataModel.unregisterObserver(mModelDataSetOberver);
+                try {
+                    oldDataModel.unregisterObserver(mModelDataSetOberver);
+                } catch (IllegalStateException e) {
+                    //Oh, well... fixes issue #557
+                }
             }
             mDataModel = dataModel;
             if (dataModel != null && isShown()) {
-                dataModel.registerObserver(mModelDataSetOberver);
+                try {
+                    dataModel.registerObserver(mModelDataSetOberver);
+                } catch (IllegalStateException e) {
+                    // Related to #557.
+                }
             }
             notifyDataSetChanged();
         }

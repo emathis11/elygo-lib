@@ -18,6 +18,9 @@ package com.actionbarsherlock.internal.view;
 import android.content.Context;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+
+import java.lang.ref.WeakReference;
+
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
 import com.actionbarsherlock.internal.view.menu.MenuPopupHelper;
 import com.actionbarsherlock.internal.view.menu.SubMenuBuilder;
@@ -26,8 +29,6 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
-import java.lang.ref.WeakReference;
 
 public class StandaloneActionMode extends ActionMode implements MenuBuilder.Callback {
     private Context mContext;

@@ -17,6 +17,12 @@
 package com.actionbarsherlock.internal.view.menu;
 
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +31,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.SparseArray;
@@ -32,17 +39,12 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
+
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Implementation of the {@link android.view.Menu} interface for creating a
@@ -351,6 +353,11 @@ public class MenuBuilder implements Menu {
 
         SparseArray<Parcelable> viewStates = states.getSparseParcelableArray(
                 getActionViewStatesKey());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB && viewStates == null) {
+            //Fixes Issue #652 with sdk <= 2.3.6
+            return;
+        }
 
         final int itemCount = size();
         for (int i = 0; i < itemCount; i++) {

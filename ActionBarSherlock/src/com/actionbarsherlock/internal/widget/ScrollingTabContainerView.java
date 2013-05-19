@@ -21,7 +21,11 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
@@ -182,8 +186,9 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
     }
 
     private IcsLinearLayout createTabLayout() {
-        final IcsLinearLayout tabLayout = (IcsLinearLayout) LayoutInflater.from(getContext())
+        final TabsLinearLayout tabLayout = (TabsLinearLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.abs__action_bar_tab_bar_view, null);
+        tabLayout.setMeasureWithLargestChildEnabled(true);
         tabLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
         return tabLayout;

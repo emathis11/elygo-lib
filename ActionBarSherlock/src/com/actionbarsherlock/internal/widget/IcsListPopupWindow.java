@@ -1,5 +1,7 @@
 package com.actionbarsherlock.internal.widget;
 
+import com.actionbarsherlock.R;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
@@ -8,11 +10,19 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
-import android.widget.*;
-import com.actionbarsherlock.R;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 
 /**
  * A proxy between pre- and post-Honeycomb implementations of this class.
@@ -246,6 +256,23 @@ public class IcsListPopupWindow {
 
     public void setInputMethodMode(int mode) {
         mPopup.setInputMethodMode(mode);
+    }
+
+    /**
+     * Set the selected position of the list.
+     * Only valid when {@link #isShowing()} == {@code true}.
+     *
+     * @param position List position to set as selected.
+     */
+    public void setSelection(int position) {
+        DropDownListView list = mDropDownList;
+        if (isShowing() && list != null) {
+            list.mListSelectionHidden = false;
+            list.setSelection(position);
+            if (list.getChoiceMode() != ListView.CHOICE_MODE_NONE) {
+                list.setItemChecked(position, true);
+            }
+        }
     }
 
     public void clearListSelection() {

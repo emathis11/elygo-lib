@@ -16,6 +16,8 @@
 
 package com.actionbarsherlock.internal.view.menu;
 
+import com.actionbarsherlock.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -23,8 +25,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.actionbarsherlock.R;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 /**
  * The item view for each item in the ListView-based MenuViews.

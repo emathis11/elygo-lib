@@ -16,6 +16,8 @@
 
 package com.actionbarsherlock.internal.app;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,6 +26,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
@@ -34,12 +37,11 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.SpinnerAdapter;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
-import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
 import com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet;
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
 import com.actionbarsherlock.internal.view.menu.MenuPopupHelper;
@@ -52,10 +54,6 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
 /**
@@ -172,7 +170,12 @@ public class ActionBarImpl extends ActionBar {
 
         // Older apps get the home button interaction enabled by default.
         // Newer apps need to enable it explicitly.
-        setHomeButtonEnabled(mContext.getApplicationInfo().targetSdkVersion < 14);
+        boolean homeButtonEnabled = mContext.getApplicationInfo().targetSdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+
+        // If the homeAsUp display option is set, always enable the home button.
+        homeButtonEnabled |= (mActionView.getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0;
+
+        setHomeButtonEnabled(homeButtonEnabled);
 
         setHasEmbeddedTabs(getResources_getBoolean(mContext,
                 R.bool.abs__action_bar_embed_tabs));
@@ -508,8 +511,8 @@ public class ActionBarImpl extends ActionBar {
         }
 
         FragmentTransaction trans = null;
-        if (mActivity instanceof SherlockFragmentActivity) {
-            trans = ((SherlockFragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
+        if (mActivity instanceof FragmentActivity) {
+            trans = ((FragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
                     .disallowAddToBackStack();
         }
 
