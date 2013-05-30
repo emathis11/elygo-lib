@@ -21,6 +21,9 @@ package lrstudios.util.android;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Environment;
@@ -28,9 +31,8 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import lrstudios.games.ego.lib.Utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
+import java.lang.reflect.Field;
 import java.util.Properties;
 
 
@@ -38,6 +40,32 @@ public class AndroidUtils {
 
     private static DialogInterface.OnClickListener _emptyDialogOnClickListener;
 
+
+    public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
+        AssetManager assets = context.getAssets();
+        File assetsDir = context.getDir(fromFolder, Context.MODE_PRIVATE);
+        for (String assetName : assets.list(fromFolder)) {
+            File file = new File(assetsDir, assetName);
+            if (file.exists())
+                file.delete();
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(file);
+                inputStream = assets.open(toFolder + "/" + assetName);
+                Utils.copyStream(inputStream, outputStream, 4096);
+            }
+            finally {
+                Utils.closeObject(inputStream);
+                Utils.closeObject(outputStream);
+            }
+        }
+    }
+
+    public static int getBitmapByteCount(Bitmap bitmap) {
+        return bitmap.getRowBytes() * bitmap.getHeight();
+    }
 
     public static Properties loadPropertiesFromAssets(Context context, String fileName) throws IOException {
         Properties props = new Properties();
@@ -93,6 +121,18 @@ public class AndroidUtils {
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state));
+    }
+
+    // See http://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+    public static int getResourceId(String variableName, Context context, Class<?> clazz) {
+        try {
+            Field field = clazz.getDeclaredField(variableName);
+            return field.getInt(field);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**

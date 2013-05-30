@@ -7,6 +7,13 @@
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
         <item name="android:buttonStyle">@style/AppButton</item>
     </style>
+    <style name="AppThemeLight.DarkActionBar" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:buttonStyle">@style/AppButton</item>
+    </style>
 
     <style name="ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid">
         <!--        <item name="background">@drawable/actionbar_top_bg</item>
@@ -37,6 +44,12 @@
     </style>
 
 
+    <style name="ButtonFillWidth">
+        <item name="android:textSize">21sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/form_button_heignt</item>
+        <item name="android:layout_margin">@dimen/form_button_margin</item>
+    </style>
     <style name="FormButtonText">
         <item name="android:textSize">21sp</item>
     </style>

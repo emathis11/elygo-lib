@@ -123,6 +123,12 @@ public final class Utils {
             output.write(buf, 0, len);
     }
 
+    public static String convertStreamToString(InputStream input) {
+        // See: http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
+        Scanner s = new Scanner(input).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
 
     /**
      * Deletes all files in the specified directory (this excludes subdirectories).
