@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import lrstudios.games.ego.lib.Utils;
 
 import java.io.*;
@@ -37,6 +38,7 @@ import java.util.Properties;
 
 
 public class AndroidUtils {
+    private static final String TAG = "AndroidUtils";
 
     private static DialogInterface.OnClickListener _emptyDialogOnClickListener;
 
@@ -44,7 +46,8 @@ public class AndroidUtils {
     public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
         AssetManager assets = context.getAssets();
         File assetsDir = context.getDir(fromFolder, Context.MODE_PRIVATE);
-        for (String assetName : assets.list(fromFolder)) {
+        String[] assetList = assets.list(fromFolder);
+        for (String assetName : assetList) {
             File file = new File(assetsDir, assetName);
             if (file.exists())
                 file.delete();

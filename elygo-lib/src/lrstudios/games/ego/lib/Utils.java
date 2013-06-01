@@ -18,6 +18,8 @@
 
 package lrstudios.games.ego.lib;
 
+import android.util.Log;
+
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -164,6 +166,10 @@ public final class Utils {
 
     public static long stopwatch_get() {
         return (System.nanoTime() - startTime) / 1000000;
+    }
+
+    public static void stopwatch_print() {
+        Log.v("Utils_stopwatch", "stopwatch_get() : " + stopwatch_get() + " ms");
     }
 
     public static String komiToString(double komi, char decimalSeparator) {
