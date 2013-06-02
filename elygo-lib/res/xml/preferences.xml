@@ -24,7 +24,7 @@
                 android:summary="@string/pref_inputtype_desc"
                 android:entries="@array/inputTypes"
                 android:entryValues="@array/inputTypes_val"
-                android:defaultValue="offsetLarge"/>
+                android:defaultValue="stylus"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_appearance">
