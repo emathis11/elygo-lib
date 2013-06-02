@@ -19,6 +19,7 @@
     <!-- Action Bar -->
     <string name="ab_pass">Passer</string>
     <string name="ab_undo">Annuler</string>
+    <string name="ab_about">A propos</string>
 
     <!-- Vs Bot -->
     <string name="gtp_resign_win">Vous gagnez par abandon !</string>

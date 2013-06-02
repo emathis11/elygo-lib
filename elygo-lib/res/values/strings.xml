@@ -20,6 +20,7 @@
     <!-- Action Bar -->
     <string name="ab_pass">Pass</string>
     <string name="ab_undo">Undo</string>
+    <string name="ab_about">About</string>
 
     <!-- Vs Bot -->
     <string name="gtp_player_color">Your color</string>

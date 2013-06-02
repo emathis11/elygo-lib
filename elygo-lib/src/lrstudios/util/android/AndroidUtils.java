@@ -21,6 +21,7 @@ package lrstudios.util.android;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -42,6 +43,18 @@ public class AndroidUtils {
 
     private static DialogInterface.OnClickListener _emptyDialogOnClickListener;
 
+
+    public static String getAppVersion(PackageManager packageManager, String packageName) {
+        String version = "?";
+        try {
+            if (packageManager != null)
+                version = packageManager.getPackageInfo(packageName, 0).versionName;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
 
     public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
         AssetManager assets = context.getAssets();
