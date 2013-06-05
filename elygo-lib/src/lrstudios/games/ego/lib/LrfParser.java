@@ -34,14 +34,16 @@ import java.util.Stack;
  */
 public final class LrfParser {
     private GoGame _game;
-    private BitWriter _writer_loop;
     private int _lrf_bits;
     private Rect _lrf_bounds;
+
+    private BitWriter _loop_writer;
+    private GoGame _loop_game;
+    private IOException _loop_exception;
 
 
     public LrfParser() {
     }
-
 
     public GoBoard parseBoard(InputStream stream) throws IOException {
         return GoBoard.importLrf(new BitReader(stream));
@@ -99,6 +101,17 @@ public final class LrfParser {
         return game;
     }
 
+    private Runnable save_loop = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                _save_loop(_loop_game.getBaseNode());
+            }
+            catch (IOException e) {
+                _loop_exception = e;
+            }
+        }
+    };
 
     public void save(GoGame game, OutputStream stream) throws IOException {
         BitWriter writer = new BitWriter(stream);
@@ -141,8 +154,20 @@ public final class LrfParser {
             _lrf_bits = _getRequiredBits(_lrf_bounds);
             writer.write(GoBoard.encodeCoords(_lrf_bounds.left, _lrf_bounds.top, game.board.getSize()), 9);
             writer.write(GoBoard.encodeCoords(_lrf_bounds.right, _lrf_bounds.bottom, game.board.getSize()), 9);
-            _writer_loop = writer;
-            _save_loop(game.getBaseNode());
+            _loop_writer = writer;
+            _loop_game = game;
+
+            // Call the recursive function from another thread to have a larger stack size
+            // (Android stack size is limited to 8KB, which throws a StackOverflowError on large trees).
+            Thread thread = new Thread(new ThreadGroup("ANDROIDSUCKS"), save_loop, "LrfParser", 256 * 1024);
+            thread.start();
+            try {
+                thread.join();
+            }
+            catch (InterruptedException ignored) {
+            }
+            if (_loop_exception != null)
+                throw _loop_exception;
         }
         else {
             writer.write(false);
@@ -159,16 +184,16 @@ public final class LrfParser {
 
         // In LRF format, we assume that black plays first
         if (move.color != GoBoard.EMPTY) {
-            _writer_loop.write(true); // bit 1 = COMMAND_PLAY_MOVE
-            _writer_loop.write(GoBoard.encodeCoords(move.x - _lrf_bounds.left, move.y - _lrf_bounds.top,
+            _loop_writer.write(true); // bit 1 = COMMAND_PLAY_MOVE
+            _loop_writer.write(GoBoard.encodeCoords(move.x - _lrf_bounds.left, move.y - _lrf_bounds.top,
                     _lrf_bounds.right - _lrf_bounds.left + 1), _lrf_bits);
 
             if (moveCount == 0) {
-                _writer_loop.write(false);
-                _writer_loop.write(1, 2); // bits 01 = COMMAND_SET_RESULT
-                _writer_loop.write((move.value < 0) ? 0 : move.value, 7);
-                _writer_loop.write(false);
-                _writer_loop.write(3, 2); // bits 11 = COMMAND_END_NODE
+                _loop_writer.write(false);
+                _loop_writer.write(1, 2); // bits 01 = COMMAND_SET_RESULT
+                _loop_writer.write((move.value < 0) ? 0 : move.value, 7);
+                _loop_writer.write(false);
+                _loop_writer.write(3, 2); // bits 11 = COMMAND_END_NODE
             }
         }
 
@@ -176,8 +201,8 @@ public final class LrfParser {
         for (GameNode nextMove : move.nextNodes) {
             // Create new branches for all nodes except the last one
             if (count < moveCount - 1) {
-                _writer_loop.write(false);
-                _writer_loop.write(2, 2); // bits 010 = COMMAND_NEW_NODE
+                _loop_writer.write(false);
+                _loop_writer.write(2, 2); // bits 010 = COMMAND_NEW_NODE
             }
 
             _save_loop(nextMove);

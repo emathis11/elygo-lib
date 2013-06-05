@@ -414,7 +414,6 @@ public final class SgfParser {
                 _writer.flush();
             }
             catch (IOException e) {
-                e.printStackTrace();
                 _exception = e;
             }
         }
