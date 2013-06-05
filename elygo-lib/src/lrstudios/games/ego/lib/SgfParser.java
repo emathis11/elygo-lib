@@ -19,9 +19,7 @@
 package lrstudios.games.ego.lib;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -57,6 +55,7 @@ public final class SgfParser {
             PROP_MAX_VALUE = 66;
 
     private PushbackReader _reader;
+    private ParseOptions _parseOptions;
     private ArrayList<GameNode> _baseNodes;
     private ArrayList<GameInfo> _gameInfos;
     private Writer _writer;
@@ -72,8 +71,12 @@ public final class SgfParser {
 
 
     public SgfParser() {
+        this(null);
     }
 
+    public SgfParser(ParseOptions options) {
+        _parseOptions = (options == null) ? new ParseOptions() : options;
+    }
 
     /**
      * Parses the specified SGF file (a single file can contain several SGF trees, which will be returned
@@ -97,7 +100,63 @@ public final class SgfParser {
         GoGame[] games = new GoGame[nodes];
         for (int i = 0; i < nodes; i++)
             games[i] = new GoGame(_gameInfos.get(i), _baseNodes.get(i));
+
+        // Parse as problems :
+        // Try to know which problem format is used to set the move values properly
+        if (_parseOptions._parseAsProblems) {
+            ArrayList<GoGame> newGames = new ArrayList<GoGame>();
+            for (GoGame game : games) {
+                GameNode baseNode = game.getBaseNode();
+                // If the board is empty at the beginning, it means that the problems are stored
+                // in the variations
+                if (baseNode.setStones == null || baseNode.setStones.size() == 0) {
+                    for (GameNode nextNode : baseNode.nextNodes) {
+                        GameNode parentNode = nextNode.parentNode;
+                        nextNode.parentNode = null;
+                        game.setBaseNode(nextNode);
+                        newGames.add(GoGame.loadSgf(game.getSgf()));
+                        game.setBaseNode(baseNode);
+                        nextNode.parentNode = parentNode;
+                    }
+                }
+            }
+            if (newGames.size() > 0) {
+                Collections.addAll(newGames, games);
+                games = newGames.toArray(new GoGame[newGames.size()]);
+            }
+
+            for (GoGame game : games)
+                _setMoveValues(game);
+        }
         return games;
+    }
+
+
+    // This method could use recursive functions but android stack size is very limited, so it should be avoided
+    private void _setMoveValues(GoGame game) {
+        GameNode baseNode = game.getBaseNode();
+
+        // Try to find move comments indicating good and bad variations
+        Stack<GameNode> stack = new Stack<GameNode>();
+        stack.push(baseNode);
+        while (!stack.empty()) {
+            GameNode node = stack.pop();
+            if (node.nextNodes.size() > 0)
+                stack.addAll(node.nextNodes);
+            else if (node.getComment().contains("RIGHT"))
+                node.setMoveValue(100);
+        }
+
+        if (baseNode.value < 100) {
+            // No solution found, we assume all are valid
+            stack = new Stack<GameNode>();
+            stack.add(baseNode);
+            while (!stack.empty()) {
+                GameNode node = stack.pop();
+                node.setMoveValue(100);
+                stack.addAll(node.nextNodes);
+            }
+        }
     }
 
     /**
@@ -589,9 +648,17 @@ public final class SgfParser {
     }
 
 
-    private final class CopyPushbackReader extends PushbackReader {
-        StringBuilder str = new StringBuilder(1024);
+    public static final class ParseOptions {
+        private boolean _parseAsProblems;
 
+        public void parseAsProblems(boolean b) {
+            _parseAsProblems = b;
+        }
+    }
+
+
+    private static final class CopyPushbackReader extends PushbackReader {
+        StringBuilder str = new StringBuilder(1024);
 
         public CopyPushbackReader(Reader reader) {
             super(reader);
