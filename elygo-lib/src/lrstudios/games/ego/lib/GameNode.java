@@ -203,8 +203,8 @@ public final class GameNode {
      * Sets the value of the current node to the specified one. This also set the
      * value of all parent nodes as long as no higher value is encountered.
      */
-    public void setMoveValue(byte value) {
-        this.value = value;
+    public void setMoveValue(int value) {
+        this.value = (byte) value;
         GameNode move = this;
         while ((move = move.parentNode) != null) {
             byte highestValue = -1;

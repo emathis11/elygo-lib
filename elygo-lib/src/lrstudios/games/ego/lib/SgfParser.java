@@ -117,14 +117,16 @@ public final class SgfParser {
             switch (ch) {
                 case ';':
                     GameNode node = _parseNode();
-                    if (curNode == null) {
-                        _baseNodes.add(node);
+                    if (node != null) {
+                        if (curNode == null) {
+                            _baseNodes.add(node);
+                        }
+                        else {
+                            node.parentNode = curNode;
+                            curNode.nextNodes.add(node);
+                        }
+                        curNode = node;
                     }
-                    else {
-                        node.parentNode = curNode;
-                        curNode.nextNodes.add(node);
-                    }
-                    curNode = node;
                     break;
 
                 case '(':
@@ -146,16 +148,17 @@ public final class SgfParser {
                     break;
 
                 case ')':
-                    curNode.nextNodes.trimToSize();
+                    if (curNode != null)
+                        curNode.nextNodes.trimToSize();
                     return;
             }
         }
     }
 
     private GameNode _parseNode() throws IOException {
-        _nodeCount++;
         byte propertyType = -2;
         boolean readingValue = false;
+        boolean propertyFound = false;
         GameNode node = new GameNode();
         _property.setLength(0);
         _value.setLength(0);
@@ -165,6 +168,7 @@ public final class SgfParser {
             char ch = (char) iCh;
             if (ch == ']' && readingValue && (_value.length() == 0 || _value.charAt(_value.length() - 1) != '\\')) {
                 _addProperty(node, propertyType, _value.toString());
+                propertyFound = true;
                 readingValue = false;
             }
             else if (!readingValue) {
@@ -189,10 +193,14 @@ public final class SgfParser {
                 _value.append(ch);
             }
         }
+        if (!propertyFound) // Empty node
+            return null;
+
         if (node.setStones != null)
             node.setStones.trimToSize();
         if (node.boardMarks != null)
             node.boardMarks.trimToSize();
+        _nodeCount++;
         return node;
     }
 

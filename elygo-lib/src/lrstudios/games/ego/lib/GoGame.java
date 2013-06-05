@@ -110,7 +110,7 @@ public class GoGame {
         _baseNode = baseNode;
         _currentNode = baseNode;
         gotoFirstMove();
-        _addRequestedStones();
+        _setRequestedStones();
         updateMarks();
     }
 
@@ -220,7 +220,7 @@ public class GoGame {
 
         _addToTree(x, y, color, prisoners);
         switchCurrentPlayer();
-        _addRequestedStones();
+        _setRequestedStones();
         updateMarks();
     }
 
@@ -464,6 +464,16 @@ public class GoGame {
     }
 
     /**
+     * Sets the base move of the current game tree.
+     */
+    public void setBaseNode(GameNode baseNode) {
+        clear();
+        _baseNode = baseNode;
+        _currentNode = _baseNode;
+        _setRequestedStones();
+    }
+
+    /**
      * Switches the next player to play (black becomes white, white becomes black).
      */
     public void switchCurrentPlayer() {
@@ -625,7 +635,7 @@ public class GoGame {
     /**
      * Sets or removes from the board the specified moves by the current node (SGF properties AE/AW/AB).
      */
-    protected void _addRequestedStones() {
+    protected void _setRequestedStones() {
         if (_currentNode.setStones == null || _currentNode.setStones.size() == 0)
             return;
 

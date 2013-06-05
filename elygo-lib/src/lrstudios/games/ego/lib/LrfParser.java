@@ -25,6 +25,7 @@ import lrstudios.util.io.BitWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -104,8 +105,16 @@ public final class LrfParser {
         GoBoard board = game.board;
         _game = game;
         String firstPlayer = game.info.firstPlayer;
-        boolean reverseColors = (firstPlayer != null && firstPlayer.length() > 0
-                && Character.toUpperCase(firstPlayer.charAt(0)) == 'W');
+        boolean reverseColors;
+        if (firstPlayer != null && firstPlayer.length() > 0) {
+            reverseColors = Character.toUpperCase(firstPlayer.charAt(0)) == 'W';
+        }
+        else {
+            // If the first player to play isn't specified, check the color of the first move
+            // in the variations
+            ArrayList<GameNode> nextNodes = _game.getBaseNode().nextNodes;
+            reverseColors = nextNodes != null && !nextNodes.isEmpty() && nextNodes.get(0).color == GoBoard.WHITE;
+        }
 
         if (reverseColors) {
             GoBoard newBoard = new GoBoard(board.getSize());

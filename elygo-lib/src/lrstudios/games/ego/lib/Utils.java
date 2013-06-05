@@ -91,7 +91,7 @@ public final class Utils {
     }
 
     /**
-     * Closes the specified object without throwing any exceptions.
+     * Closes the specified object without throwing any exceptions. The object can be null.
      */
     public static void closeObject(Closeable closeable) {
         try {

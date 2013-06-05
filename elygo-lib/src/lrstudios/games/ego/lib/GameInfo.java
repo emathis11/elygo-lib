@@ -155,7 +155,7 @@ public class GameInfo {
     public String round;
 
     /**
-     * Provides the used rules for this game. Because there are many different rules, It requires
+     * Provides the rules used for this game. Because there are many different rules, It requires
      * mandatory names only for a small set of well known rule sets :<br/>
      * "AGA" (rules of the American Go Association)<br/>
      * "GOE" (the Ing rules of Goe)<br/>
