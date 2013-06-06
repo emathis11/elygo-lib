@@ -101,7 +101,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             FileInputStream stream = null;
             try {
                 stream = openFileInput("gtp_save.sgf");
-                restoredGame = GoGame.loadSgf(stream);
+                restoredGame = GoGame.loadSgf(stream)[0];
                 boardSize = restoredGame.info.boardSize;
             }
             catch (Exception e) {

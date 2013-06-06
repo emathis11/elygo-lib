@@ -582,9 +582,8 @@ public class GoGame {
      *
      * @throws IOException An error occured during reading (The SGF may be corrupted).
      */
-    public static GoGame loadSgf(final InputStream stream) throws IOException {
-        GoGame[] games = new SgfParser().parse(stream);
-        return games.length > 0 ? games[0] : new GoGame(19, 6.5, 0);
+    public static GoGame[] loadSgf(final InputStream stream) throws IOException {
+        return new SgfParser().parse(stream);
     }
 
     /**
@@ -592,11 +591,11 @@ public class GoGame {
      *
      * @throws IOException An error occured during reading (The SGF is probably corrupted).
      */
-    public static GoGame loadSgf(final String sgf) throws IOException {
+    public static GoGame[] loadSgf(final String sgf) throws IOException {
         InputStream stream = new ByteArrayInputStream(sgf.getBytes());
-        GoGame game = loadSgf(stream);
+        GoGame[] games = loadSgf(stream);
         stream.close();
-        return game;
+        return games;
     }
 
     /**

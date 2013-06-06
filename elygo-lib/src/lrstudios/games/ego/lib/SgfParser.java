@@ -114,7 +114,7 @@ public final class SgfParser {
                         GameNode parentNode = nextNode.parentNode;
                         nextNode.parentNode = null;
                         game.setBaseNode(nextNode);
-                        newGames.add(GoGame.loadSgf(game.getSgf()));
+                        newGames.add(GoGame.loadSgf(game.getSgf())[0]);
                         game.setBaseNode(baseNode);
                         nextNode.parentNode = parentNode;
                     }
