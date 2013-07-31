@@ -46,7 +46,7 @@ import java.util.List;
 
 /**
  * Displays a go board.<p>
- * <p/>
+ *
  * There are no functions to manipulate the go board in the view. It's only a visual
  * representation of a board and any board manipulation is done outside of this class.
  */

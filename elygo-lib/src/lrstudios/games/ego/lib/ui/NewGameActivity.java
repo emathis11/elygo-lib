@@ -73,10 +73,10 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
         // Restore last values
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        _spn_boardSize.setSelection(prefs.getInt(_PREF_BOARDSIZE, 3));
+        _spn_boardSize.setSelection(prefs.getInt(_PREF_BOARDSIZE, 1));
         _spn_komi.setSelection(prefs.getInt(_PREF_KOMI, 1));
         _spn_color.setSelection(prefs.getInt(_PREF_COLOR, 0));
-        _spn_level.setSelection(prefs.getInt(_PREF_LEVEL, 9));
+        _spn_level.setSelection(prefs.getInt(_PREF_LEVEL, 4));
         _spn_handicap.setSelection(prefs.getInt(_PREF_HANDICAP, 0));
 
         findViewById(R.id.btn_play_start).setOnClickListener(this);

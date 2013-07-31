@@ -194,6 +194,8 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
                         }
                         if (destFile.exists())
                             destFile.delete();
+                        if (destFile.getParentFile().mkdirs())
+                            Log.v(TAG, "Directories recreated");
 
                         FileOutputStream stream = null;
                         try {
