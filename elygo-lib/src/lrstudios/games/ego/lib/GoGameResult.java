@@ -60,7 +60,7 @@ public class GoGameResult {
     private GoGameResult(String result) {
         char c = result.charAt(0);
 
-        if (c == '0' || c == 'D') {
+        if (c == '0' || c == 'D' || c == 'J') {
             winner = JIGO;
         }
         else if (c == 'V') {
@@ -86,8 +86,14 @@ public class GoGameResult {
                     score = TIME;
                 else if (c == 'F')
                     score = FORFEIT;
-                else if (Character.isDigit(c))
-                    score = SgfParser.parseKomi(result.substring(2), '.');
+                else if (Character.isDigit(c)) {
+                    try {
+                        score = SgfParser.parseKomi(result.substring(2), '.');
+                    }
+                    catch (NumberFormatException ignored) {
+
+                    }
+                }
             }
         }
     }
