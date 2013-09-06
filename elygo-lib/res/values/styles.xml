@@ -6,13 +6,9 @@
         <item name="windowContentOverlay">@drawable/actionbar_shadow</item>
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
         <item name="android:buttonStyle">@style/AppButton</item>
-    </style>
-    <style name="AppThemeLight.DarkActionBar" parent="Theme.Sherlock.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/ActionBar</item>
-        <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="windowContentOverlay">@drawable/actionbar_shadow</item>
-        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
-        <item name="android:buttonStyle">@style/AppButton</item>
+
+        <item name="detailedSeekBar_titleStyle">@style/DetailedSeekBar_Title</item>
+        <item name="detailedSeekBar_descriptionStyle">@style/DetailedSeekBar_Description</item>
     </style>
 
     <style name="ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid">
@@ -43,6 +39,13 @@
         <item name="android:padding">8dp</item>
     </style>
 
+    <style name="DetailedSeekBar_Title" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="DetailedSeekBar_Description" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">15sp</item>
+    </style>
 
     <style name="ButtonFillWidth">
         <item name="android:textSize">21sp</item>
