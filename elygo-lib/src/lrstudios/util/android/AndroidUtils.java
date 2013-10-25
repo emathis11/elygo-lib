@@ -35,6 +35,7 @@ import lrstudios.games.ego.lib.Utils;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Properties;
 
 
@@ -54,6 +55,16 @@ public class AndroidUtils {
             e.printStackTrace();
         }
         return version;
+    }
+
+    public static boolean assetExists(Context context, String path) {
+        try {
+            Utils.closeObject(context.getAssets().open(path));
+            return true;
+        }
+        catch (IOException ignored) {
+            return false;
+        }
     }
 
     public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
