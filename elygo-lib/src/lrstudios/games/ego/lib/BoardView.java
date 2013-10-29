@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -755,12 +756,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         int finalHeight;
 
         // Rules :
-        // - If the two specs are identical, set the view to use all the available space
-        // - If only one of the measure specs is set to AT_MOST, make the view a square
+        // - If at least one of the measure specs is set to AT_MOST, make the view a square
+        // - Else, set the view to use all of the available space
 
-        if ((modeWidth == MeasureSpec.AT_MOST && modeHeight != MeasureSpec.AT_MOST)
-                || (modeWidth != MeasureSpec.AT_MOST && modeHeight == MeasureSpec.AT_MOST))
-        {
+        if (modeWidth == MeasureSpec.AT_MOST || modeHeight == MeasureSpec.AT_MOST) {
             int minSize = Math.min(sizeWidth, sizeHeight);
             finalWidth = minSize;
             finalHeight = minSize;
@@ -770,6 +769,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             finalHeight = sizeHeight;
         }
 
+        Log.v(TAG, "modes = " + modeWidth + " , " + modeHeight);
+        Log.v(TAG, "sizes = " + sizeWidth + " , " + sizeHeight);
         setMeasuredDimension(finalWidth, finalHeight);
     }
 
