@@ -94,11 +94,12 @@ public final class Utils {
      * Closes the specified object without throwing any exceptions. The object can be null.
      */
     public static void closeObject(Closeable closeable) {
-        try {
-            if (closeable != null)
+        if (closeable != null) {
+            try {
                 closeable.close();
-        }
-        catch (Exception ignored) {
+            }
+            catch (Exception ignored) {
+            }
         }
     }
 
