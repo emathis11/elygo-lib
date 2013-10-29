@@ -51,7 +51,7 @@ import java.util.List;
  * representation of a board and any board manipulation is done outside of this class.
  */
 public final class BoardView extends SurfaceView implements SurfaceHolder.Callback {
-    private static final String TAG = "BoardView";
+    private static final String TAG = BoardView.class.getSimpleName();
 
     private static final double ANIM_CAPTURE_DURATION = 380.0;
 
@@ -746,10 +746,31 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (!_isZoom && _finalHeight > 0) // TODO this won't work properly if a board is zoomed and set to "wrap_content" (add a _fullscreen field?)
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(widthMeasureSpec));
-        else
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
+        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
+
+        int finalWidth;
+        int finalHeight;
+
+        // Rules :
+        // - If the two specs are identical, set the view to use all the available space
+        // - If only one of the measure specs is set to AT_MOST, make the view a square
+
+        if ((modeWidth == MeasureSpec.AT_MOST && modeHeight != MeasureSpec.AT_MOST)
+                || (modeWidth != MeasureSpec.AT_MOST && modeHeight == MeasureSpec.AT_MOST))
+        {
+            int minSize = Math.min(sizeWidth, sizeHeight);
+            finalWidth = minSize;
+            finalHeight = minSize;
+        }
+        else {
+            finalWidth = sizeWidth;
+            finalHeight = sizeHeight;
+        }
+
+        setMeasuredDimension(finalWidth, finalHeight);
     }
 
 
