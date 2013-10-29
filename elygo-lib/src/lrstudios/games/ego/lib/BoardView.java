@@ -197,14 +197,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        readPreferences();
+        if (!isInEditMode())
+            readPreferences();
+
+        _stdBitmapPaint = new Paint();
+        _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
 
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         surfaceHolder.addCallback(this);
-
-        _stdBitmapPaint = new Paint();
-        _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
     }
 
 
