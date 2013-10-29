@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:paddingTop="0dp"
@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="6dp"
-                    custom:showWhiteStone="true"/>
+                    app:showWhiteStone="true"/>
             <TextView
                     android:id="@+id/score_white_time"
                     android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    custom:showWhiteStone="false"/>
+                    app:showWhiteStone="false"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
