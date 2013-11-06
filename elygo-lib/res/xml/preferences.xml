@@ -34,7 +34,7 @@
                 android:summary="@string/pref_theme_desc"
                 android:entries="@array/themePref"
                 android:entryValues="@array/themePref_val"
-                android:defaultValue="standard"/>
+                android:defaultValue="darkwood"/>
         <ListPreference
                 android:title="@string/pref_stonespadding"
                 android:key="stonePaddingPref"

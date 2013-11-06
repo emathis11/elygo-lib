@@ -223,13 +223,13 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             if (!(_theme instanceof BlackWhiteTheme))
                 _theme = new BlackWhiteTheme(getContext());
         }
-        else if (skin.equals("darkwood")) {
-            if (!(_theme instanceof DarkBoardTheme))
-                _theme = new DarkBoardTheme(getContext());
-        }
-        else {
+        else if (skin.equals("standard")) {
             if (!(_theme instanceof StandardTheme))
                 _theme = new StandardTheme(getContext());
+        }
+        else {
+            if (!(_theme instanceof DarkBoardTheme))
+                _theme = new DarkBoardTheme(getContext());
         }
 
         _setting_offsetY = inputType.startsWith("offset") ? getResources().getDimension(R.dimen.stone_input_offset) : 0;
@@ -769,8 +769,6 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             finalHeight = sizeHeight;
         }
 
-        Log.v(TAG, "modes = " + modeWidth + " , " + modeHeight);
-        Log.v(TAG, "sizes = " + sizeWidth + " , " + sizeHeight);
         setMeasuredDimension(finalWidth, finalHeight);
     }
 
