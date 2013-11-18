@@ -24,82 +24,31 @@ import android.graphics.Path.Direction;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.util.Log;
 
 
 public abstract class Theme {
-    private static final String TAG = "Theme";
+    private static final String TAG = Theme.class.getSimpleName();
 
-
-    /**
-     * Le bitmap contenant l'image d'une pierre noire.
-     */
     public Bitmap blackStoneBitmap;
-
-    /**
-     * Le Drawable représentant une pierre blanche.
-     */
     public Bitmap whiteStoneBitmap;
 
-    /**
-     * Objet Paint à utiliser pour dessiner les marques sur des pierres noires.
-     */
     public Paint blackMarkPaint;
-    /**
-     * Objet Paint à utiliser pour dessiner les marques sur des pierres blanches.
-     */
     public Paint whiteMarkPaint;
-    /**
-     * Objet Paint à utiliser pour dessiner les marques directement sur le goban.
-     */
     public Paint boardMarkPaint;
 
-    /**
-     * Objet Paint à utiliser pour dessiner un texte sur une pierre noire.
-     */
     public Paint blackLabelPaint;
-    /**
-     * Objet Paint à utiliser pour dessiner un texte sur une pierre blanche.
-     */
     public Paint whiteLabelPaint;
-    /**
-     * Objet Paint à utiliser pour dessiner un texte directement sur le goban.
-     */
     public Paint boardLabelPaint;
 
-    /**
-     * Objet Paint à utiliser pour dessiner les lignes du cross cursor.
-     */
     public Paint crossCursorPaint;
-    /**
-     * Objet Paint à utiliser pour dessiner les lignes du cross cursor pour un coup illégal.
-     */
     public Paint illegalCrossCursorPaint;
-
-    /**
-     * Objet Paint à utiliser pour dessiner les marques représentant une bonne variation.
-     */
     public Paint goodVariationPaint;
-
-    /**
-     * Objet Paint à utiliser pour dessiner les marques représentant une mauvaise variation.
-     */
     public Paint badVariationPaint;
 
-    /**
-     * Marque en forme de triangle.
-     */
     public ShapeDrawable triangleMark;
-    /**
-     * Marque en forme de cercle.
-     */
     public ShapeDrawable circleMark;
-    /**
-     * Marque en forme de croix.
-     */
     public ShapeDrawable crossMark;
-    /**
-     * Marque en forme de carré.
-     */
     public ShapeDrawable squareMark;
 
     public ShapeDrawable blackTerritory;
@@ -109,8 +58,7 @@ public abstract class Theme {
     protected Paint _hoshiPaint;
     protected Paint _gridPaint;
     protected Paint _anyPaint;
-    protected PathShape _hoshiShape;
-    protected PathShape _gridShape;
+
     protected Drawable _deadBlackStone;
     protected Drawable _deadWhiteStone;
     protected Drawable _blackVariation;
@@ -138,6 +86,9 @@ public abstract class Theme {
 
         _gridPaint = new Paint();
         _hoshiPaint = new Paint();
+
+        _gridPaint.setAntiAlias(true);
+        _hoshiPaint.setAntiAlias(true);
 
         _anyPaint = new Paint();
         _anyPaint.setAntiAlias(true);
@@ -208,51 +159,12 @@ public abstract class Theme {
         final float boardWidth = stoneSize * boardSize;
         final float lineEnd = boardWidth - intervalDIV2;
 
-        // Grille
-        Path path = new Path();
-        for (int i = 0; i < boardSize; i++) {
-            final float pos = intervalDIV2 + stoneSize * i;
-            path.moveTo(pos, intervalDIV2);
-            path.lineTo(pos, lineEnd);
-            path.moveTo(intervalDIV2, pos);
-            path.lineTo(lineEnd, pos);
-        }
-        _gridShape = new PathShape(path, boardWidth, boardWidth);
-
-
-        // Hoshis
-        path = new Path();
-        float radius = intervalDIV2 / 4.0f;
-        int decal = (boardSize > 12) ? 7 : 5;
-
-        path.addCircle(intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
-        path.addCircle(boardWidth - intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
-        path.addCircle(intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
-        path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
-
-        if (boardSize % 2 == 1) {
-            path.addCircle(boardWidth / 2f, boardWidth / 2f, radius, Direction.CW);
-            if (boardSize > 10) {
-                path.addCircle(boardWidth / 2f, intervalDIV2 * decal, radius, Direction.CW);
-                path.addCircle(boardWidth / 2f, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
-                path.addCircle(intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
-                path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
-            }
-        }
-        _hoshiShape = new PathShape(path, boardWidth, boardWidth);
-
-        int surfaceHeight = config.surfaceHeight;
-        int surfaceWidth = config.surfaceWidth;
-        int surfaceSmallestSize = (surfaceWidth > surfaceHeight) ? surfaceHeight : surfaceWidth;
-        _gridShape.resize(surfaceSmallestSize, surfaceSmallestSize);
-        _hoshiShape.resize(surfaceSmallestSize, surfaceSmallestSize);
-
 
         /***** Marques ******/
 
         // Marques de décompte
         float margin = stoneSize / 4.0f;
-        path = new Path();
+        Path path = new Path();
         path.moveTo(margin, margin);
         path.lineTo(stoneSize - margin, stoneSize - margin);
         path.moveTo(margin, stoneSize - margin);
@@ -308,8 +220,6 @@ public abstract class Theme {
         anyStoneDrawable = new ShapeDrawable(new PathShape(path, stoneSize, stoneSize));
         anyStoneDrawable.getPaint().set(_anyPaint);
 
-
-        /***** Stones *****/
         int newStoneSize = Math.round(stoneSize) - config.stonesPadding * 2;
         blackStoneBitmap = createBlackStoneBitmap(newStoneSize);
         whiteStoneBitmap = createWhiteStoneBitmap(newStoneSize);
@@ -317,11 +227,55 @@ public abstract class Theme {
 
 
     /**
-     * Dessine la grille sur le canvas spécifié.
+     * Draw the grid and star points on the specified Canvas.
      */
-    public void drawGrid(Canvas canvas) {
-        _gridShape.draw(canvas, _gridPaint);
-        _hoshiShape.draw(canvas, _hoshiPaint);
+    public void drawGrid(Canvas canvas, Rect clipBounds) {
+        float stoneSize = _config.stoneSize;
+        int boardSize = _config.boardSize;
+
+        float intervalDIV2 = stoneSize / 2.0f;
+        float boardWidth = stoneSize * (clipBounds.width() + 1);
+        float boardHeight = stoneSize * (clipBounds.height() + 1);
+
+        // Grid
+        float lineStartX = (clipBounds.left == 0) ? intervalDIV2 : 0;
+        float lineEndX = (clipBounds.right == boardSize - 1) ? boardWidth - intervalDIV2 : boardWidth;
+        float lineStartY = (clipBounds.top == 0) ? intervalDIV2 : 0;
+        float lineEndY = (clipBounds.bottom == boardSize - 1) ? boardHeight - intervalDIV2 : boardHeight;
+
+        for (int x = 0, len = clipBounds.width(); x <= len; x++) {
+            float xPos = intervalDIV2 + stoneSize * x;
+            canvas.drawLine(xPos, lineStartY, xPos, lineEndY, _gridPaint);
+        }
+
+        for (int y = 0, len = clipBounds.height(); y <= len; y++) {
+            float yPos = intervalDIV2 + stoneSize * y;
+            canvas.drawLine(lineStartX, yPos, lineEndX, yPos, _gridPaint);
+        }
+
+        // Star points
+        float fullWidth = stoneSize * boardSize;
+
+        float radius = intervalDIV2 / 4.0f;
+        int shift = (boardSize > 12) ? 7 : 5;
+
+        float offsetX = stoneSize * clipBounds.left;
+        float offsetY = stoneSize * clipBounds.top;
+
+        canvas.drawCircle(-offsetX + intervalDIV2 * shift, -offsetY + intervalDIV2 * shift, radius, _hoshiPaint);
+        canvas.drawCircle(-offsetX + fullWidth - intervalDIV2 * shift, -offsetY + intervalDIV2 * shift, radius, _hoshiPaint);
+        canvas.drawCircle(-offsetX + intervalDIV2 * shift, -offsetY + fullWidth - intervalDIV2 * shift, radius, _hoshiPaint);
+        canvas.drawCircle(-offsetX + fullWidth - intervalDIV2 * shift, -offsetY + fullWidth - intervalDIV2 * shift, radius, _hoshiPaint);
+
+        if (boardSize % 2 == 1) {
+            canvas.drawCircle(-offsetX + fullWidth / 2f, -offsetY + fullWidth / 2f, radius, _hoshiPaint);
+            if (boardSize > 10) {
+                canvas.drawCircle(-offsetX + fullWidth / 2f, -offsetY + intervalDIV2 * shift, radius, _hoshiPaint);
+                canvas.drawCircle(-offsetX + fullWidth / 2f, -offsetY + fullWidth - intervalDIV2 * shift, radius, _hoshiPaint);
+                canvas.drawCircle(-offsetX + intervalDIV2 * shift, -offsetY + fullWidth / 2f, radius, _hoshiPaint);
+                canvas.drawCircle(-offsetX + fullWidth - intervalDIV2 * shift, -offsetY + fullWidth / 2f, radius, _hoshiPaint);
+            }
+        }
     }
 
     public void drawDeadBlackStone(Canvas canvas, int left, int top, int interval) {

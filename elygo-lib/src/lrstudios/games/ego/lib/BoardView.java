@@ -504,10 +504,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         // Grid
         canvas.save();
         canvas.clipRect(0, 0, _finalWidth, _finalHeight);
-        canvas.scale(_zoomFactor, _zoomFactor);
-        canvas.translate(-Math.round(_clipBounds.left * _baseGridInterval), -Math.round(_clipBounds.top * _baseGridInterval));
 
-        _theme.drawGrid(canvas);
+        _theme.drawGrid(canvas, _clipBounds);
 
         canvas.restore();
 
@@ -752,24 +750,17 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-        int finalWidth;
-        int finalHeight;
-
         // Rules :
         // - If at least one of the measure specs is set to AT_MOST, make the view a square
         // - Else, set the view to use all of the available space
 
         if (modeWidth == MeasureSpec.AT_MOST || modeHeight == MeasureSpec.AT_MOST) {
             int minSize = Math.min(sizeWidth, sizeHeight);
-            finalWidth = minSize;
-            finalHeight = minSize;
+            setMeasuredDimension(minSize, minSize);
         }
         else {
-            finalWidth = sizeWidth;
-            finalHeight = sizeHeight;
+            setMeasuredDimension(sizeWidth, sizeHeight);
         }
-
-        setMeasuredDimension(finalWidth, finalHeight);
     }
 
 
@@ -841,9 +832,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
 
     public interface BoardListener {
-        /**
-         * Called when the user clicks on an intersection of the board.
-         */
+        /** Called when the user clicks on an intersection of the board. */
         void onPress(int x, int y);
     }
 
