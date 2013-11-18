@@ -612,6 +612,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 String markText = Character.toString(mark.getLabel()).toLowerCase();
                 Rect bounds = new Rect();
                 paint.getTextBounds(markText, 0, markText.length(), bounds);
+
+                // Don't draw the grid on empty intersections as they are hard to read
+                if (GoBoard.EMPTY == colors[mark.y * boardSize + mark.x])
+                    _theme.drawBackground(canvas, x * stoneSize, y * stoneSize, (x + 1) * stoneSize, (y + 1) * stoneSize);
+
                 canvas.drawText(markText,
                         stoneSize * x + (stoneSize / 2.0f) - AndroidUtils.getTextWidth(markText, paint) / 2.0f, // getTextWidth() is more accurate than getBounds()
                         stoneSize * y + (stoneSize / 2.0f) + bounds.height() / 2.0f,
