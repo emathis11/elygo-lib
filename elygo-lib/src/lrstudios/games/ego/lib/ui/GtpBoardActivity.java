@@ -214,6 +214,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     @Override
     public void onPress(int x, int y) {
         if (_engine.playMove(new Coords(x, y))) {
+            _soundHelper.playStoneSound();
             _updatePrisoners();
             _updateGameLogic();
         }
@@ -297,6 +298,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                         showInfoDialog(getString(R.string.board_player_passes, _engine.getName()));
                 }
                 else if (move.x >= 0) {
+                    _soundHelper.playStoneSound();
                     _updatePrisoners();
                 }
                 else {
@@ -315,8 +317,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 _boardView.showFinalStatus(true);
                 _boardView.invalidate();
 
-                String winner = getString(
-                        result.getWinner() == GoGameResult.BLACK ? R.string.black : R.string.white);
+                String winner = getString(result.getWinner() == GoGameResult.BLACK ? R.string.black : R.string.white);
                 setTitle(getString(R.string.gtp_game_result,
                         winner, new DecimalFormat("#0.#").format(result.getScore())));
                 disableOptionItem(R.id.menu_undo);

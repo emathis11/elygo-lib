@@ -4,12 +4,6 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="LIBRARY_PROJECT" value="true" />
-        <notImportedProperties>
-          <property>MANIFEST_FILE_PATH</property>
-          <property>RESOURCES_DIR_PATH</property>
-          <property>ASSETS_DIR_PATH</property>
-          <property>NATIVE_LIBS_DIR_PATH</property>
-        </notImportedProperties>
       </configuration>
     </facet>
   </component>
@@ -19,11 +13,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Android 4.2.2" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="ActionBarSherlock" />
-    <orderEntry type="library" name="json" level="project" />
     <orderEntry type="library" name="android-support-v4" level="project" />
+    <orderEntry type="module" module-name="ActionBarSherlock" />
+    <orderEntry type="module" module-name="ActionBarSherlock" />
   </component>
 </module>
 

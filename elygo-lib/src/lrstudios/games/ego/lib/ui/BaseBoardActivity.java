@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -42,6 +43,7 @@ import lrstudios.games.ego.lib.BoardView;
 import lrstudios.games.ego.lib.GoGame;
 import lrstudios.games.ego.lib.R;
 import lrstudios.games.ego.lib.Utils;
+import lrstudios.games.ego.lib.util.SoundHelper;
 import lrstudios.util.android.AndroidUtils;
 import lrstudios.util.android.ui.BetterFragmentActivity;
 
@@ -75,14 +77,24 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
     protected BoardView _boardView;
     private File _internalGamesDir;
 
+    protected SoundHelper _soundHelper;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        _soundHelper = new SoundHelper(this);
+
         _internalGamesDir = getDir("SGF", Context.MODE_PRIVATE);
         _loadPreferences();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        _soundHelper.release();
+    }
 
     @Override
     public void setContentView(final int layoutResID) {
@@ -250,6 +262,7 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         _wakeLockEnabled = prefs.getBoolean("wakeLockPref", true);
         _hideStatusBar = prefs.getBoolean("statusBarPref", false);
         _tsumegoColor = prefs.getString("tsumegoColorPref", "black");
+        _soundHelper.setSoundsEnabled(prefs.getBoolean("enableSound", true));
 
         window.setFlags(_wakeLockEnabled ? WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON : 0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.setFlags(_hideStatusBar ? WindowManager.LayoutParams.FLAG_FULLSCREEN : 0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
