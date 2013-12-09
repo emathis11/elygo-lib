@@ -69,10 +69,11 @@ public class AndroidUtils {
 
     public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
         AssetManager assets = context.getAssets();
-        File assetsDir = context.getDir(fromFolder, Context.MODE_PRIVATE);
+        File destDir = context.getDir(toFolder, Context.MODE_PRIVATE);
         String[] assetList = assets.list(fromFolder);
+
         for (String assetName : assetList) {
-            File file = new File(assetsDir, assetName);
+            File file = new File(destDir, assetName);
             if (file.exists())
                 file.delete();
 
@@ -80,7 +81,7 @@ public class AndroidUtils {
             OutputStream outputStream = null;
             try {
                 outputStream = new FileOutputStream(file);
-                inputStream = assets.open(toFolder + "/" + assetName);
+                inputStream = assets.open(fromFolder + "/" + assetName);
                 Utils.copyStream(inputStream, outputStream, 4096);
             }
             finally {
