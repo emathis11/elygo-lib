@@ -97,6 +97,12 @@ public abstract class GtpEngine {
         }
 
         _game.gotoLastMove();
+
+        if (_game.getCurrentMoveNumber() > 0) {
+            byte color = _game.getCurrentNode().color;
+            if (color == GoBoard.WHITE || color == GoBoard.BLACK)
+                _playerColor = GoBoard.getOppositeColor(color);
+        }
     }
 
 

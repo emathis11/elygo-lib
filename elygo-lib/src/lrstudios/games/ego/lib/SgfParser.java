@@ -646,6 +646,18 @@ public final class SgfParser {
         return integerPart + (integerPart >= 0 ? 1f : -1f) * (decimalPart / 10f);
     }
 
+    public static GoGame[] parse(File file) throws IOException {
+        FileInputStream stream = null;
+
+        try {
+            stream = new FileInputStream(file);
+            return new SgfParser().parse(stream);
+        }
+        finally {
+            Utils.closeObject(stream);
+        }
+    }
+
 
     public static final class ParseOptions {
         private boolean _parseAsProblems;

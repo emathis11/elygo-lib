@@ -61,7 +61,6 @@ public class GtpThread extends HandlerThread implements Handler.Callback {
         synchronized (this) {
             while (_handler == null) {
                 try {
-                    Log.v(TAG, "waiting GTP thread initialization");
                     wait();
                 }
                 catch (InterruptedException ignored) {
