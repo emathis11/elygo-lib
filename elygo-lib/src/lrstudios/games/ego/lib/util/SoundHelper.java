@@ -39,7 +39,7 @@ public class SoundHelper {
     }
 
     private void playSound(int soundId) {
-        if (_enabled)
+        if (_enabled && _soundPool != null)
             _soundPool.play(soundId, 0.99f, 0.99f, 0, 0, 1.0f);
     }
 }
