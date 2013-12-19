@@ -422,8 +422,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             AndroidUtils.Rect_addMargin(_clipBounds, (_size < 19 ? 99 : _zoom_margin), maxBounds);
         }
 
-        int hSize = _clipBounds.width() + 1;
-        int vSize = _clipBounds.height() + 1;
+        int hSize = Math.max(1, _clipBounds.width() + 1);
+        int vSize = Math.max(1, _clipBounds.height() + 1);
         int zoom_largestBoardSize = (hSize > vSize) ? hSize : vSize;
         int zoom_smallestBoardSize = (hSize > vSize) ? vSize : hSize;
 

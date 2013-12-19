@@ -58,7 +58,7 @@ import java.util.Random;
  * The base class for all board activities (Tsumego, IGS, ...) which contains the common data and functions.
  */
 public abstract class BaseBoardActivity extends BetterFragmentActivity implements BoardView.BoardListener {
-    private static final String TAG = "BaseBoardActivity";
+    private static final String TAG = BaseBoardActivity.class.getSimpleName();
 
     private static final String SD_CARD_GAMES_FOLDER_PATH = "ElyGo/SGF"; // TODO
 
@@ -252,6 +252,11 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
             file = new File(_internalGamesDir, desiredFileName);
         }
         warningView.setVisibility(file.exists() ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    protected void playStoneSound(int x, int y) {
+        if (x >= 0 && y >= 0)
+            _soundHelper.playStoneSound();
     }
 
 

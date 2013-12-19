@@ -214,7 +214,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     @Override
     public void onPress(int x, int y) {
         if (_engine.playMove(new Coords(x, y))) {
-            _soundHelper.playStoneSound();
+            playStoneSound(x, y);
             _updatePrisoners();
             _updateGameLogic();
         }
@@ -298,7 +298,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                         showInfoDialog(getString(R.string.board_player_passes, _engine.getName()));
                 }
                 else if (move.x >= 0) {
-                    _soundHelper.playStoneSound();
+                    playStoneSound(move.x, move.y);
                     _updatePrisoners();
                 }
                 else {
