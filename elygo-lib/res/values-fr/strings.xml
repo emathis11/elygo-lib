@@ -74,7 +74,7 @@
     <string name="pref_stonespadding_desc">L\'espace entre les pierres sur le goban</string>
 
     <!-- Error messages -->
-    <string name="err_internal">Une erreur interne est survenue, veuillez réessayer.</string>
+    <string name="err_internal">Une erreur inattendue est survenue.</string>
     <string name="err_filename_short">Le nom de la partie est trop court.</string>
     <string name="err_sd_read_only">Impossible de sauvegarder la partie : la carte SD a été retirée ou n\'est plus
         accessible.

@@ -76,7 +76,7 @@
     <string name="pref_stonespadding_desc">The space between stones on the board</string>
 
     <!-- Error messages -->
-    <string name="err_internal">An internal error occurred, please try again.</string>
+    <string name="err_internal">An unexpected error occurred.</string>
     <string name="err_filename_short">The name of the game is too short.</string>
     <string name="err_sd_read_only">Cannot save the game : the SD card is read-only.</string>
     <string name="err_save_game">An error occurred while saving the game, please try again.</string>
