@@ -695,25 +695,28 @@ public class GoGame {
         int c2 = _size / 2;
         int c3 = _size - 3 - shift;
 
-        switch (handicap) {
-            case 8:
-                addStone(c2, c1, GoBoard.BLACK);
-                addStone(c2, c3, GoBoard.BLACK);
-            case 6:
-                addStone(c1, c2, GoBoard.BLACK);
-                addStone(c3, c2, GoBoard.BLACK);
-            case 4:
-                addStone(c3, c3, GoBoard.BLACK);
-            case 3:
-                addStone(c1, c1, GoBoard.BLACK);
-            case 2:
-                addStone(c1, c3, GoBoard.BLACK);
-                addStone(c3, c1, GoBoard.BLACK);
-                break;
+        if (handicap >= 8) {
+            addStone(c2, c1, GoBoard.BLACK);
+            addStone(c2, c3, GoBoard.BLACK);
+        }
+        if (handicap >= 6) {
+            addStone(c1, c2, GoBoard.BLACK);
+            addStone(c3, c2, GoBoard.BLACK);
+        }
+        if (handicap >= 4) {
+            addStone(c3, c3, GoBoard.BLACK);
+        }
+        if (handicap >= 3) {
+            addStone(c1, c1, GoBoard.BLACK);
+        }
+        if (handicap >= 2) {
+            addStone(c1, c3, GoBoard.BLACK);
+            addStone(c3, c1, GoBoard.BLACK);
         }
 
-        if (handicap == 5 || handicap == 7 || handicap == 9)
-            board.set(c2, c2, GoBoard.BLACK);
+        if (handicap == 5 || handicap == 7 || handicap == 9) {
+            addStone(c2, c2, GoBoard.BLACK);
+        }
 
         setNextPlayer(GoBoard.WHITE);
         info.handicap = handicap;
