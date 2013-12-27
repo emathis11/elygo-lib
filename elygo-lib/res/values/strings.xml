@@ -14,6 +14,7 @@
     <string name="refresh">Refresh</string>
     <string name="boardsize">Board size</string>
     <string name="version">Version %s</string>
+    <string name="random">Random</string>
 
     <string name="preferences_title">Settings</string>
 

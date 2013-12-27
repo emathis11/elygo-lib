@@ -30,9 +30,9 @@
     </string-array>
 
     <string-array name="playColor">
-        <item>Black</item>
-        <item>White</item>
-        <item>Random</item>
+        <item>@string/black</item>
+        <item>@string/white</item>
+        <item>@string/random</item>
     </string-array>
 
     <string-array name="playLevels">

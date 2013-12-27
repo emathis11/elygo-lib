@@ -14,6 +14,7 @@
     <string name="refresh">Aktualisieren</string>
     <string name="boardsize">Brettgröße</string>
     <string name="version">Version %s</string>
+    <string name="random">Zufällig</string>
 
     <string name="preferences_title">Einstellungen</string>
 

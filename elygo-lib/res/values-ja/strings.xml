@@ -14,6 +14,7 @@
     <string name="refresh">リフレッシュ</string>
     <string name="boardsize">盤のサイズ</string>
     <string name="version">バージョン %s</string>
+    <string name="random">ランダム</string>
 
     <string name="preferences_title">設定</string>
 
