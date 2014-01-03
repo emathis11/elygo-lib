@@ -79,6 +79,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private int _surfaceSmallestSize;
     private int _surfaceLargestSize;
     private int _leftMargin;
+    private int _topMargin;
     private float _answerCircleRadius;
     private float _baseGridInterval;
     private float _offsetY;
@@ -384,6 +385,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             _offsetY = 0;
 
         _leftMargin = (_surfaceWidth - _finalWidth) / 2;
+        _topMargin = (_surfaceHeight - _finalHeight) / 2;
         _zoomFactor = _stoneSize / _baseGridInterval;
         _crossCursor.set(-1, -1);
 
@@ -446,7 +448,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             _baseBounds = null;
             _computeDimensions(false);
         }
-        else {
+        // If the board is zoomed...
+        else if (hSize < _size || vSize < _size) {
             // If an entire side of the board is shown, there may be some space left on this side. We remove it
             int spaceWidth = (_surfaceWidth - _finalWidth) / _stoneSize;
 
@@ -499,7 +502,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     public void onDraw(Canvas canvas) {
         // Background
         _theme.drawBackground(canvas, 0, 0, _surfaceWidth, _surfaceHeight);
-        canvas.translate(_leftMargin, 0);
+        canvas.translate(_leftMargin, _topMargin);
 
         // Grid
         canvas.save();
@@ -677,8 +680,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
             Paint paint = _isMoveLegal ? _theme.crossCursorPaint : _theme.illegalCrossCursorPaint;
             canvas.drawLine(
-                    stoneSize * x + stoneSize / 2f, 0,
-                    stoneSize * x + stoneSize / 2f, _surfaceHeight, paint);
+                    stoneSize * x + stoneSize / 2f, -_topMargin,
+                    stoneSize * x + stoneSize / 2f, _surfaceHeight - _topMargin, paint);
             canvas.drawLine(
                     -_leftMargin, stoneSize * y + stoneSize / 2f,
                     _surfaceWidth - _leftMargin, stoneSize * y + stoneSize / 2f, paint);
@@ -795,8 +798,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                     it.remove();
 
                 invalidate(
-                        _leftMargin + anim.startX, anim.startY,
-                        _leftMargin + anim.startX + anim.startWidth, anim.startY + anim.startHeight);
+                        _leftMargin + anim.startX, _topMargin + anim.startY,
+                        _leftMargin + anim.startX + anim.startWidth, _topMargin + anim.startY + anim.startHeight);
             }
 
             _refreshHandler.postUpdate((long) SLEEP_INTERVAL);
@@ -809,8 +812,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * WARNING : for performance issues, the reference returned will always be the same.
      */
     private Point _cache_getBoardCoordsAtLocation(float x, float y) {
-        int finalX = (int) (x / _stoneSize) + _clipBounds.left;
-        int finalY = (int) (y / _stoneSize) + _clipBounds.top;
+        int finalX = (int) ((x - _leftMargin) / _stoneSize) + _clipBounds.left;
+        int finalY = (int) ((y - _topMargin) / _stoneSize) + _clipBounds.top;
         _pt_coord2point.set(finalX, finalY);
         return _pt_coord2point;
     }
