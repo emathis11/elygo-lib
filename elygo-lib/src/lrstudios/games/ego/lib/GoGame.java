@@ -543,6 +543,7 @@ public class GoGame {
         _playedMoves.clear();
         _baseNode = new GameNode(BASE_NODE_COORD, BASE_NODE_COORD, GoBoard.EMPTY);
         _currentNode = _baseNode;
+        _currentPlayer = GoBoard.BLACK;
         board.clear();
     }
 
