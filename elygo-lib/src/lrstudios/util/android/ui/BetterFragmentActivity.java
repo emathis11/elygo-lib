@@ -19,11 +19,13 @@
 package lrstudios.util.android.ui;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import lrstudios.games.ego.lib.R;
 import lrstudios.util.android.AndroidUtils;
 
 
@@ -37,12 +39,28 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
 
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         _optionsMenu = menu;
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+            finish();
+        else
+            return super.onOptionsItemSelected(item);
+
+        return true;
+    }
 
     /**
      * Returns the {@link Menu} containing the current items of the Action Bar.
