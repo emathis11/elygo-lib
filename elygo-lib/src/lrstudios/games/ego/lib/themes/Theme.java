@@ -155,10 +155,6 @@ public abstract class Theme {
         whiteLabelPaint.setTextSize(stoneSize * 0.82f);
         boardLabelPaint = whiteLabelPaint;
 
-        final float intervalDIV2 = stoneSize / 2.0f;
-        final float boardWidth = stoneSize * boardSize;
-        final float lineEnd = boardWidth - intervalDIV2;
-
 
         /***** Marques ******/
 
@@ -220,7 +216,7 @@ public abstract class Theme {
         anyStoneDrawable = new ShapeDrawable(new PathShape(path, stoneSize, stoneSize));
         anyStoneDrawable.getPaint().set(_anyPaint);
 
-        int newStoneSize = Math.round(stoneSize) - config.stonesPadding * 2;
+        int newStoneSize = Math.max(1, Math.round(stoneSize) - config.stonesPadding * 2);
         blackStoneBitmap = createBlackStoneBitmap(newStoneSize);
         whiteStoneBitmap = createWhiteStoneBitmap(newStoneSize);
     }
