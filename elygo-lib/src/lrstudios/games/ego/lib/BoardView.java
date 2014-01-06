@@ -94,6 +94,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private Rect _tempBounds = new Rect();
     private boolean _isMoveLegal;
     private boolean _forceRequiresValidation;
+    private boolean _forceHideCoordinates;
     private boolean _allowIllegalMoves;
     private boolean _playLock;
     private boolean _showAnswers;
@@ -274,6 +275,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      */
     public void setMoveValidation(boolean needValidation) {
         _forceRequiresValidation = needValidation;
+    }
+
+    public void setHideCoordinates(boolean hide) {
+        _forceHideCoordinates = hide;
+        invalidate();
     }
 
     /**
@@ -508,7 +514,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         _theme.drawBackground(canvas, 0, 0, _surfaceWidth, _surfaceHeight);
 
         // Coordinates
-        if (_showCoordinates) {
+        if (_showCoordinates && !_forceHideCoordinates) {
             _theme.coordinatesPaint.setTextSize(_stoneSize / 2.2f);
             _theme.coordinatesPaint.getTextBounds("A", 0, 1, _tempBounds);
             int textHeight = _tempBounds.height();
