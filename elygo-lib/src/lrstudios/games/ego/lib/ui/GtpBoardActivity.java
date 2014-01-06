@@ -33,7 +33,9 @@ import lrstudios.games.ego.lib.*;
 
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 
 
@@ -196,9 +198,14 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         }
         else if (id == R.id.menu_save) {
             // Give a default name to the game : "BotName_MonthDay_HoursMinutes"
-            Date now = new Date();
+            Calendar calendar = new GregorianCalendar();
             String defaultName = String.format("%s_%02d%02d_%02d%02d",
-                    _engine.getName().replace(" ", ""), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
+                    _engine.getName().replace(" ", ""),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH),
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE));
+
             _showSaveDialog(_engine.getGame(), defaultName, true);
         }
         else if (id == R.id.menu_pass) {
