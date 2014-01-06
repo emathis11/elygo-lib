@@ -19,12 +19,16 @@
 package lrstudios.games.ego.lib.themes;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.Path.Direction;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.Log;
+import lrstudios.games.ego.lib.LibConfig;
+import lrstudios.games.ego.lib.R;
+import lrstudios.games.ego.lib.TypefaceCache;
 
 
 public abstract class Theme {
@@ -45,6 +49,8 @@ public abstract class Theme {
     public Paint illegalCrossCursorPaint;
     public Paint goodVariationPaint;
     public Paint badVariationPaint;
+
+    public Paint coordinatesPaint;
 
     public ShapeDrawable triangleMark;
     public ShapeDrawable circleMark;
@@ -83,10 +89,10 @@ public abstract class Theme {
      */
     public Theme(Context context) {
         _context = context;
+        Resources res = context.getResources();
 
         _gridPaint = new Paint();
         _hoshiPaint = new Paint();
-
         _gridPaint.setAntiAlias(true);
         _hoshiPaint.setAntiAlias(true);
 
@@ -139,6 +145,11 @@ public abstract class Theme {
         whiteLabelPaint.setAntiAlias(true);
         whiteLabelPaint.setStrokeWidth(0);
         whiteLabelPaint.setColor(Color.rgb(33, 33, 33));
+
+        coordinatesPaint = new Paint();
+        coordinatesPaint.setAntiAlias(true);
+        coordinatesPaint.setColor(Color.BLACK);
+        coordinatesPaint.setTextAlign(Paint.Align.CENTER);
     }
 
 

@@ -38,6 +38,7 @@ import lrstudios.games.ego.lib.themes.BlackWhiteTheme;
 import lrstudios.games.ego.lib.themes.DarkBoardTheme;
 import lrstudios.games.ego.lib.themes.StandardTheme;
 import lrstudios.games.ego.lib.themes.Theme;
+import lrstudios.games.ego.lib.util.GoUtils;
 import lrstudios.util.android.AndroidUtils;
 
 import java.util.ArrayList;
@@ -90,6 +91,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private Point _moveValidated;
     private Rect _baseBounds;
     private Rect _clipBounds;
+    private Rect _tempBounds = new Rect();
     private boolean _isMoveLegal;
     private boolean _forceRequiresValidation;
     private boolean _allowIllegalMoves;
@@ -97,6 +99,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private boolean _showAnswers;
     private boolean _showVariations;
     private boolean _showFinalStatus;
+    private boolean _showCoordinates;
     private boolean _reverseColors;
     private boolean _monocolor;
 
@@ -217,6 +220,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         _stonesPadding = Integer.parseInt(prefs.getString("stonePaddingPref", "1"));
         _gridLineSize = Integer.parseInt(prefs.getString("gridLinesSizePref", "1"));
         _requiresValidation = _forceRequiresValidation || prefs.getBoolean("requiresValidationPref", false);
+        _showCoordinates = prefs.getBoolean("showCoordinates", false);
         String skin = prefs.getString("themePref", "standard");
         String inputType = prefs.getString("inputType", "0");
 
@@ -307,6 +311,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         invalidate();
     }
 
+    public void showCoordinates(boolean show) {
+        _showCoordinates = show;
+        invalidate();
+    }
+
     /**
      * If the answers are already shown, they will become hidden and vice versa.
      */
@@ -352,14 +361,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        //Log.v(TAG, "surfaceChanged() width=" + width + ", height=" + height);
-
-        final boolean isLandscape = width > height;
+        boolean isLandscape = width > height;
         _surfaceWidth = width;
         _surfaceHeight = height;
         _surfaceSmallestSize = (isLandscape) ? height : width;
@@ -368,8 +372,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
-     * Recreates some graphical objects when the zoom, board or screen size is changed.
-     * This also invalidates the view.
+     * Recreates graphic objects when a visual setting is changed (zoom, board size, ...).
      */
     public void recreateGraphics() {
         if (_surfaceWidth <= 0 || _surfaceHeight <= 0)
@@ -488,6 +491,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             _game = new GoGame(9, 6.5, 0);
             changeGame(_game, false);
         }
+
         setWillNotDraw(false); // Necessary for `onDraw()` to be called
         _gestureDetector = new GestureDetector(getContext(), new BoardGestureListener());
     }
@@ -502,6 +506,26 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     public void onDraw(Canvas canvas) {
         // Background
         _theme.drawBackground(canvas, 0, 0, _surfaceWidth, _surfaceHeight);
+
+        // Coordinates
+        if (_showCoordinates) {
+            _theme.coordinatesPaint.setTextSize(_stoneSize / 2.2f);
+            _theme.coordinatesPaint.getTextBounds("A", 0, 1, _tempBounds);
+            int textHeight = _tempBounds.height();
+
+            for (int x = _clipBounds.left; x <= _clipBounds.right; x++)
+                canvas.drawText(GoUtils.getCoordinateChars(x),
+                        _leftMargin + _stoneSize / 2f + _stoneSize * x,
+                        textHeight + (_stoneSize / 2f - textHeight + _topMargin) / 2f,
+                        _theme.coordinatesPaint);
+
+            for (int y = _clipBounds.top; y <= _clipBounds.bottom; y++)
+                canvas.drawText(Integer.toString(_size - y),
+                        _stoneSize / 4f + _leftMargin / 2f,
+                        _topMargin + _stoneSize / 2f + _stoneSize * y + textHeight / 2f,
+                        _theme.coordinatesPaint);
+        }
+
         canvas.translate(_leftMargin, _topMargin);
 
         // Grid
@@ -516,7 +540,6 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         final GoBoard board = _game.board;
         final int boardSize = board.getSize();
         final byte[] colors = board.getBoardArray();
-        final int stoneSize = _stoneSize;
 
         for (int curX = _clipBounds.left; curX <= _clipBounds.right; curX++) {
             for (int curY = _clipBounds.top; curY <= _clipBounds.bottom; curY++) {
@@ -544,21 +567,21 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                     }
                     if (color == GoBoard.BLACK_TERRITORY) {
                         _theme.blackTerritory.setBounds(
-                                stoneSize * x, stoneSize * y,
-                                stoneSize * (x + 1), stoneSize * (y + 1));
+                                _stoneSize * x, _stoneSize * y,
+                                _stoneSize * (x + 1), _stoneSize * (y + 1));
                         _theme.blackTerritory.draw(canvas);
                     }
                     else if (color == GoBoard.WHITE_TERRITORY) {
                         _theme.whiteTerritory.setBounds(
-                                stoneSize * x, stoneSize * y,
-                                stoneSize * (x + 1), stoneSize * (y + 1));
+                                _stoneSize * x, _stoneSize * y,
+                                _stoneSize * (x + 1), _stoneSize * (y + 1));
                         _theme.whiteTerritory.draw(canvas);
                     }
                     else if (color == GoBoard.DEAD_BLACK_STONE) {
-                        _theme.drawDeadBlackStone(canvas, stoneSize * x, stoneSize * y, stoneSize);
+                        _theme.drawDeadBlackStone(canvas, _stoneSize * x, _stoneSize * y, _stoneSize);
                     }
                     else if (color == GoBoard.DEAD_WHITE_STONE) {
-                        _theme.drawDeadWhiteStone(canvas, stoneSize * x, stoneSize * y, stoneSize);
+                        _theme.drawDeadWhiteStone(canvas, _stoneSize * x, _stoneSize * y, _stoneSize);
                     }
                     else {
                         showStatus = false;
@@ -570,11 +593,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                     if (_reverseColors && color != GoBoard.EMPTY)
                         color = GoBoard.getOppositeColor(color);
                     if (color == GoBoard.BLACK && !_monocolor)
-                        canvas.drawBitmap(_theme.blackStoneBitmap, stoneSize * x + _stonesPadding, stoneSize * y + _stonesPadding, _stdBitmapPaint);
+                        canvas.drawBitmap(_theme.blackStoneBitmap, _stoneSize * x + _stonesPadding, _stoneSize * y + _stonesPadding, _stdBitmapPaint);
                     else if (color == GoBoard.WHITE || (color == GoBoard.BLACK && _monocolor))
-                        canvas.drawBitmap(_theme.whiteStoneBitmap, stoneSize * x + _stonesPadding, stoneSize * y + _stonesPadding, _stdBitmapPaint);
+                        canvas.drawBitmap(_theme.whiteStoneBitmap, _stoneSize * x + _stonesPadding, _stoneSize * y + _stonesPadding, _stdBitmapPaint);
                     else if (color == GoBoard.ANY)
-                        _theme.drawAnyStone(canvas, stoneSize * x, stoneSize * y, stoneSize);
+                        _theme.drawAnyStone(canvas, _stoneSize * x, _stoneSize * y, _stoneSize);
                 }
             }
         }
@@ -590,9 +613,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                             color = GoBoard.getOppositeColor(color);
 
                         if (color == GoBoard.BLACK)
-                            _theme.drawBlackVariation(canvas, stoneSize * move.x, stoneSize * move.y, stoneSize);
+                            _theme.drawBlackVariation(canvas, _stoneSize * move.x, _stoneSize * move.y, _stoneSize);
                         else if (color == GoBoard.WHITE)
-                            _theme.drawWhiteVariation(canvas, stoneSize * move.x, stoneSize * move.y, stoneSize);
+                            _theme.drawWhiteVariation(canvas, _stoneSize * move.x, _stoneSize * move.y, _stoneSize);
                     }
                 }
             }
@@ -613,16 +636,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                         (color == GoBoard.WHITE) ? _theme.whiteLabelPaint : _theme.boardLabelPaint;
 
                 String markText = Character.toString(mark.getLabel()).toLowerCase();
-                Rect bounds = new Rect();
-                paint.getTextBounds(markText, 0, markText.length(), bounds);
+                paint.getTextBounds(markText, 0, markText.length(), _tempBounds);
 
                 // Don't draw the grid on empty intersections as they are hard to read
                 if (GoBoard.EMPTY == colors[mark.y * boardSize + mark.x])
-                    _theme.drawBackground(canvas, x * stoneSize, y * stoneSize, (x + 1) * stoneSize, (y + 1) * stoneSize);
+                    _theme.drawBackground(canvas, x * _stoneSize, y * _stoneSize, (x + 1) * _stoneSize, (y + 1) * _stoneSize);
 
                 canvas.drawText(markText,
-                        stoneSize * x + (stoneSize / 2.0f) - AndroidUtils.getTextWidth(markText, paint) / 2.0f, // getTextWidth() is more accurate than getBounds()
-                        stoneSize * y + (stoneSize / 2.0f) + bounds.height() / 2.0f,
+                        _stoneSize * x + (_stoneSize / 2.0f) - AndroidUtils.getTextWidth(markText, paint) / 2.0f, // getTextWidth() is more accurate than getBounds()
+                        _stoneSize * y + (_stoneSize / 2.0f) + _tempBounds.height() / 2.0f,
                         paint);
             }
             // Shapes
@@ -649,10 +671,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 if (markShape != null) {
                     markShape.getPaint().set(paint);
                     markShape.setBounds(
-                            Math.round(stoneSize * x + stoneSize / MARK_PADDING),
-                            Math.round(stoneSize * y + stoneSize / MARK_PADDING),
-                            Math.round(stoneSize * x + stoneSize - stoneSize / MARK_PADDING),
-                            Math.round(stoneSize * y + stoneSize - stoneSize / MARK_PADDING));
+                            Math.round(_stoneSize * x + _stoneSize / MARK_PADDING),
+                            Math.round(_stoneSize * y + _stoneSize / MARK_PADDING),
+                            Math.round(_stoneSize * x + _stoneSize - _stoneSize / MARK_PADDING),
+                            Math.round(_stoneSize * y + _stoneSize - _stoneSize / MARK_PADDING));
                     markShape.draw(canvas);
                 }
             }
@@ -667,8 +689,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 int x = node.x - _clipBounds.left;
                 int y = node.y - _clipBounds.top;
                 canvas.drawCircle(
-                        stoneSize * x + stoneSize / 2,
-                        stoneSize * y + stoneSize / 2,
+                        _stoneSize * x + _stoneSize / 2,
+                        _stoneSize * y + _stoneSize / 2,
                         _answerCircleRadius, (node.value > 0) ? _theme.goodVariationPaint : _theme.badVariationPaint);
             }
         }
@@ -680,11 +702,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
             Paint paint = _isMoveLegal ? _theme.crossCursorPaint : _theme.illegalCrossCursorPaint;
             canvas.drawLine(
-                    stoneSize * x + stoneSize / 2f, -_topMargin,
-                    stoneSize * x + stoneSize / 2f, _surfaceHeight - _topMargin, paint);
+                    _stoneSize * x + _stoneSize / 2f, -_topMargin,
+                    _stoneSize * x + _stoneSize / 2f, _surfaceHeight - _topMargin, paint);
             canvas.drawLine(
-                    -_leftMargin, stoneSize * y + stoneSize / 2f,
-                    _surfaceWidth - _leftMargin, stoneSize * y + stoneSize / 2f, paint);
+                    -_leftMargin, _stoneSize * y + _stoneSize / 2f,
+                    _surfaceWidth - _leftMargin, _stoneSize * y + _stoneSize / 2f, paint);
 
             if (_isMoveLegal) {
                 Drawable cursor;
@@ -698,8 +720,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 else
                     cursor = _cursorDrawableWhite;
                 cursor.setBounds(
-                        stoneSize * x + _stonesPadding, stoneSize * y + _stonesPadding,
-                        stoneSize * x - _stonesPadding + _stoneSize, stoneSize * y - _stonesPadding + _stoneSize);
+                        _stoneSize * x + _stonesPadding, _stoneSize * y + _stonesPadding,
+                        _stoneSize * x - _stonesPadding + this._stoneSize, _stoneSize * y - _stonesPadding + this._stoneSize);
                 cursor.draw(canvas);
             }
         }
@@ -833,7 +855,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
          * Updates all animations, then refresh the View.
          */
         public void postUpdate(long delayMillis) {
-            this.removeMessages(_MSG_REPAINT);
+            removeMessages(_MSG_REPAINT);
             sendMessageDelayed(obtainMessage(_MSG_REPAINT), delayMillis);
         }
     }
