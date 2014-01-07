@@ -16,6 +16,7 @@ public class SoundHelper {
     private boolean _enabled = true;
 
     private int _sound_stone;
+    private int _sound_pass;
 
 
     public SoundHelper(Context context) {
@@ -23,6 +24,7 @@ public class SoundHelper {
 
         _soundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
         _sound_stone = _soundPool.load(context, R.raw.stone, 1);
+        _sound_pass = _soundPool.load(context, R.raw.pass, 1);
     }
 
     public void release() {
@@ -32,6 +34,10 @@ public class SoundHelper {
 
     public void playStoneSound() {
         playSound(_sound_stone);
+    }
+
+    public void playPassSound() {
+        playSound(_sound_pass);
     }
 
     public void setSoundsEnabled(boolean enable) {

@@ -257,6 +257,8 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
     protected void playStoneSound(int x, int y) {
         if (x >= 0 && y >= 0)
             _soundHelper.playStoneSound();
+        else if (x == -1 && y == -1)
+            _soundHelper.playPassSound();
     }
 
 
