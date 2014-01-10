@@ -225,6 +225,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         String skin = prefs.getString("themePref", "standard");
         String inputType = prefs.getString("inputType", "0");
 
+        if (prefs.contains("monocolorPref"))
+            _monocolor = prefs.getBoolean("monocolorPref", false);
+
         if (skin.equals("blackwhite")) {
             if (!(_theme instanceof BlackWhiteTheme))
                 _theme = new BlackWhiteTheme(getContext());
