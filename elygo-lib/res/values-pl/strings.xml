@@ -15,6 +15,7 @@
     <string name="boardsize">Rozmiar planszy</string>
     <string name="version">Wersja %s</string>
     <string name="random">Przypadkowy</string>
+    <string name="loading">Wczytywanie…</string>
 
     <string name="preferences_title">Ustawienia</string>
 

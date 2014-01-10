@@ -15,6 +15,7 @@
     <string name="boardsize">盤のサイズ</string>
     <string name="version">バージョン %s</string>
     <string name="random">ランダム</string>
+    <string name="loading">読み込んでいます…</string>
 
     <string name="preferences_title">設定</string>
 

@@ -15,6 +15,7 @@
     <string name="boardsize">Размер доски</string>
     <string name="version">Версия %s</string>
     <string name="random">случайный</string>
+    <string name="loading">Загрузка…</string>
 
     <string name="preferences_title">Настройки</string>
 

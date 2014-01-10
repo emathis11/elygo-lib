@@ -15,6 +15,7 @@
     <string name="boardsize">Tamaño del goban</string>
     <string name="version">Versión %s</string>
     <string name="random">Azar</string>
+    <string name="loading">Cargando…</string>
 
     <string name="preferences_title">Parámetros</string>
 

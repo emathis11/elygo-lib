@@ -233,7 +233,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 _theme = new BlackWhiteTheme(getContext());
         }
         else if (skin.equals("standard")) {
-            if (!(_theme instanceof StandardTheme))
+            if (_theme instanceof DarkBoardTheme || !(_theme instanceof StandardTheme))
                 _theme = new StandardTheme(getContext());
         }
         else {

@@ -14,6 +14,7 @@
     <string name="refresh">Rafraîchir</string>
     <string name="boardsize">Taille du goban</string>
     <string name="random">Aléatoire</string>
+    <string name="loading">Chargement…</string>
 
     <string name="preferences_title">Paramètres</string>
 
