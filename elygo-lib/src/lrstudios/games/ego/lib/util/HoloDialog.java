@@ -34,8 +34,18 @@ public class HoloDialog {
             _context = context;
         }
 
+        public Builder setTitle(int titleResId) {
+            _title = _context.getString(titleResId);
+            return this;
+        }
+
         public Builder setTitle(String title) {
             _title = title;
+            return this;
+        }
+
+        public Builder setMessage(int messageResId) {
+            _message = _context.getString(messageResId);
             return this;
         }
 
