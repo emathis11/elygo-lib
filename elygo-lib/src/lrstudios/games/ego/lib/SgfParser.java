@@ -363,6 +363,9 @@ public final class SgfParser {
             case PROP_DATE:
                 _gameInfo.gameDate = value;
                 break;
+            case PROP_ROUND:
+                _gameInfo.round = value;
+                break;
 
             case PROP_UNDEFINED:
                 //System.err.println("SgfParser warning: No SGF property found (value : \"" + value + "\")");
@@ -441,31 +444,22 @@ public final class SgfParser {
         if (node.parentNode == null) {
             if (!_optimized) {
                 _writer.write("GM[1]FF[4]CA[UTF-8]");
-                if (_gameInfo.applicationName != null && _gameInfo.applicationName.length() > 0)
-                    _writeProperty("AP", _gameInfo.applicationName);
+                _writeProperty("AP", _gameInfo.applicationName);
             }
             _writeProperty("RU", _gameInfo.rules == null ? "Japanese" : _gameInfo.rules);
-            if (_gameInfo.whiteName != null && _gameInfo.whiteName.length() > 0)
-                _writeProperty("PW", _gameInfo.whiteName);
-            if (_gameInfo.blackName != null && _gameInfo.blackName.length() > 0)
-                _writeProperty("PB", _gameInfo.blackName);
-            if (_gameInfo.whiteRank != null && _gameInfo.whiteRank.length() > 0)
-                _writeProperty("WR", _gameInfo.whiteRank);
-            if (_gameInfo.blackRank != null && _gameInfo.blackRank.length() > 0)
-                _writeProperty("BR", _gameInfo.blackRank);
+            _writeProperty("PW", _gameInfo.whiteName);
+            _writeProperty("PB", _gameInfo.blackName);
+            _writeProperty("WR", _gameInfo.whiteRank);
+            _writeProperty("BR", _gameInfo.blackRank);
 
             _writeProperty("SZ", _gameInfo.boardSize);
             _writeProperty("KM", _komiToSgfString(_gameInfo.komi));
-            if (_gameInfo.handicap > 0)
-                _writeProperty("HA", _gameInfo.handicap);
-            if (_gameInfo.result != null)
-                _writeProperty("RE", _gameInfo.result.toString());
-            if (_gameInfo.firstPlayer != null && _gameInfo.firstPlayer.length() > 0)
-                _writeProperty("PL", _gameInfo.firstPlayer);
-            if (_gameInfo.eventName != null && _gameInfo.eventName.length() > 0)
-                _writeProperty("EV", _gameInfo.eventName);
-            if (_gameInfo.gameDate != null && _gameInfo.gameDate.length() > 0)
-                _writeProperty("DT", _gameInfo.gameDate);
+            _writeProperty("HA", _gameInfo.handicap);
+            _writeProperty("RE", _gameInfo.result.toString());
+            _writeProperty("PL", _gameInfo.firstPlayer);
+            _writeProperty("EV", _gameInfo.eventName);
+            _writeProperty("DT", _gameInfo.gameDate);
+            _writeProperty("RO", _gameInfo.round);
         }
 
         if (node.color != GoBoard.EMPTY) {
@@ -559,14 +553,19 @@ public final class SgfParser {
                     _writer.write("[" + coordsToString(mark.x, mark.y) + ":" + mark.getLabel() + "]");
             }
         }
+
         String comment = node.getComment();
-        if (comment.length() > 0) {
+        if (comment.length() > 0)
             _writeProperty("C", comment.replace("]", "\\]"));
-        }
     }
 
-    private void _writeProperty(String property, Object value) throws IOException {
-        _writer.write(String.format("%s[%s]", property, value.toString()));
+    private void _writeProperty(String property, int value) throws IOException {
+        _writer.write(String.format("%s[%d]", property, value));
+    }
+
+    private void _writeProperty(String property, String value) throws IOException {
+        if (value != null && value.length() > 0)
+            _writer.write(String.format("%s[%s]", property, value));
     }
 
 

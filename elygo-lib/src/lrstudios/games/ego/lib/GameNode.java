@@ -96,7 +96,7 @@ public final class GameNode {
 
 
     /**
-     * Gets the comment associated to this node.
+     * Gets the comment associated to this node (never null).
      */
     public String getComment() {
         if (_comment_utf8 == null)
