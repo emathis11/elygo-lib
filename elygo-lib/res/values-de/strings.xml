@@ -69,9 +69,9 @@
     <string name="pref_fastinput">Erfordert Bestätigung</string>
     <string name="pref_fastinput_off">Züge werden gleich gespielt.</string>
     <string name="pref_fastinput_on">Das Spielen eines Zugs erfordert Bestätigung (zweites Tippen).</string>
-    <string name="pref_inputtype">Steineingabetype</string>
+    <string name="pref_inputtype">Eingabemodus</string>
     <string name="pref_inputtype_desc">Bietet mehrere Arten, einen Zug zu spielen.</string>
-    <string name="pref_theme">Brettdesign</string>
+    <string name="pref_theme">Aussehen des Brettes</string>
     <string name="pref_theme_desc">Die optische Erscheinung des Bretts einstellen</string>
     <string name="pref_linesize">Linienstärke</string>
     <string name="pref_linesize_desc"></string>
