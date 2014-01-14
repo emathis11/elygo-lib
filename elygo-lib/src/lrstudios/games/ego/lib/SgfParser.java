@@ -455,7 +455,8 @@ public final class SgfParser {
             _writeProperty("SZ", _gameInfo.boardSize);
             _writeProperty("KM", _komiToSgfString(_gameInfo.komi));
             _writeProperty("HA", _gameInfo.handicap);
-            _writeProperty("RE", _gameInfo.result.toString());
+            if (_gameInfo.result != null)
+                _writeProperty("RE", _gameInfo.result.toString());
             _writeProperty("PL", _gameInfo.firstPlayer);
             _writeProperty("EV", _gameInfo.eventName);
             _writeProperty("DT", _gameInfo.gameDate);
@@ -646,11 +647,15 @@ public final class SgfParser {
     }
 
     public static GoGame[] parse(File file) throws IOException {
+        return parse(file, null);
+    }
+
+    public static GoGame[] parse(File file, ParseOptions options) throws IOException {
         FileInputStream stream = null;
 
         try {
             stream = new FileInputStream(file);
-            return new SgfParser().parse(stream);
+            return new SgfParser(options).parse(stream);
         }
         finally {
             Utils.closeObject(stream);
