@@ -50,9 +50,9 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             INTENT_PLAY_RESTORE = "lrstudios.games.ego.PLAY_RESTORE",
             INTENT_GTP_BOT_CLASS = "lrstudios.games.ego.BOT_CLASS";
 
+    private static GtpThread _gtpThread;
 
     private ScoreView _scoreView;
-    private static GtpThread _gtpThread;
     private ActivityHandler _handler = new ActivityHandler();
     private GtpEngine _engine;
     private ProgressDialog _waitingScoreDialog;

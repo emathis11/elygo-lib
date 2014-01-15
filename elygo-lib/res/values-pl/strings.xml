@@ -61,6 +61,7 @@
     <!-- Preferences -->
     <string name="pref_general">Ogólne</string>
     <string name="pref_appearance">Wygląd</string>
+    <string name="pref_sound">Dźwięk</string>
     <string name="pref_wakelock">Pozostaw ekran włączony</string>
     <string name="pref_wakelock_desc">Tylko wtedy, gdy plansza jest otwarta</string>
     <string name="pref_statusbar">Ukryj pasek stanu</string>

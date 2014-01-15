@@ -61,6 +61,7 @@
     <!-- Preferences -->
     <string name="pref_general">Общее</string>
     <string name="pref_appearance">Внешний вид</string>
+    <string name="pref_sound">Звук</string>
     <string name="pref_wakelock">Держите экран вкл.</string>
     <string name="pref_wakelock_desc">Только если доска открыта</string>
     <string name="pref_statusbar">Скрыть строку состояния</string>

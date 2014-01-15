@@ -60,7 +60,8 @@
         <!-- Preferences -->
     <string name="pref_general">通常設定</string>
     <string name="pref_appearance">外観</string>
-    <string name="pref_wakelock">Wake lock を無効にする</string>
+    <string name="pref_sound">音</string>
+    <string name="pref_wakelock">ウェイクロックを無効にする</string>
     <string name="pref_wakelock_desc">ゲームが開いている場合のみ</string>
     <string name="pref_statusbar">ステータスバーを隠す</string>
     <string name="pref_statusbar_desc">ゲームが開いている場合のみ</string>

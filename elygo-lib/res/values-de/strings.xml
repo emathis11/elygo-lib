@@ -62,6 +62,7 @@
     <!-- Preferences -->
     <string name="pref_general">Allgemein</string>
     <string name="pref_appearance">Erscheinungsbild</string>
+    <string name="pref_sound">Töne</string>
     <string name="pref_wakelock">Display wachhalten</string>
     <string name="pref_wakelock_desc">Nur wenn ein Brett offen ist</string>
     <string name="pref_statusbar">Statusleiste verbergen</string>

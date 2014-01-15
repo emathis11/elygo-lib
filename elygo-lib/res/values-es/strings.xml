@@ -60,6 +60,7 @@
     <!-- Preferences -->
     <string name="pref_general">General</string>
     <string name="pref_appearance">Aparencia</string>
+    <string name="pref_sound">Sonido</string>
     <string name="pref_wakelock">Desactivar la puesta en espera</string>
     <string name="pref_wakelock_desc">Unicamente si un goban está abierto</string>
     <string name="pref_statusbar">Ocultar la barra de estatuto</string>

@@ -61,7 +61,8 @@
     <!-- Preferences -->
     <string name="pref_general">General</string>
     <string name="pref_appearance">Appearance</string>
-    <string name="pref_wakelock">Disable Wake lock</string>
+    <string name="pref_sound">Sound</string>
+    <string name="pref_wakelock">Keep screen on</string>
     <string name="pref_wakelock_desc">Only if a board is open</string>
     <string name="pref_statusbar">Hide Status bar</string>
     <string name="pref_statusbar_desc">Only if a board is open</string>
