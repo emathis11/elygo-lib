@@ -63,8 +63,7 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
     private static final String SD_CARD_GAMES_FOLDER_PATH = "ElyGo/SGF"; // TODO
 
     public static final String
-            INTENT_GAME_INFO = "lrstudios.games.ego.GAME_INFO",
-            INTENT_GAME_MODE = "lrstudios.games.ego.GAME_MODE";
+            INTENT_GAME_INFO = "lrstudios.games.ego.GAME_INFO";
 
     protected static final Random _random = new Random();
     protected static final int CODE_PREFERENCES_ACTIVITY = 501;

@@ -114,10 +114,8 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
         }
 
         MenuItem item = _optionsMenu.findItem(itemMenuId);
-        if (item == null) {
-            Log.w(TAG, "Cannot find menu item id " + itemMenuId);
+        if (item == null)
             return false;
-        }
 
         item.setEnabled(enabled);
         return true;
