@@ -141,10 +141,22 @@ public final class SgfParser {
         stack.push(baseNode);
         while (!stack.empty()) {
             GameNode node = stack.pop();
-            if (node.nextNodes.size() > 0)
+            String comment = node.getComment();
+
+            if (node.nextNodes.size() > 0) {
                 stack.addAll(node.nextNodes);
-            else if (node.getComment().contains("RIGHT"))
+            }
+            else if (comment.contains("RIGHT")) {
                 node.setMoveValue(100);
+
+                if (comment.endsWith("RIGHT"))
+                    node.setComment(comment.substring(0, comment.length() - 5));
+                else if (comment.startsWith("RIGHT"))
+                    node.setComment(comment.substring(5));
+            }
+            else {
+                node.setMoveValue(0);
+            }
         }
 
         if (baseNode.value < 100) {
