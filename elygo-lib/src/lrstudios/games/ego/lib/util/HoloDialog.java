@@ -1,18 +1,34 @@
 package lrstudios.games.ego.lib.util;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import lrstudios.games.ego.lib.R;
 
 
-public class HoloDialog {
+public class HoloDialog extends Dialog {
+
+    protected HoloDialog(Context context) {
+        super(context);
+    }
+
+    protected HoloDialog(Context context, int theme) {
+        super(context, theme);
+    }
+
+    protected HoloDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+        super(context, cancelable, cancelListener);
+    }
+
 
     public static final class Builder {
         private Context _context;
@@ -82,7 +98,7 @@ public class HoloDialog {
             return this;
         }
 
-        public AlertDialog show() {
+        public Dialog show() {
             View dialogView = LayoutInflater.from(_context).inflate(R.layout.alert_dialog_holo, null);
 
             if (_title == null && _iconResId == 0) {
@@ -130,9 +146,9 @@ public class HoloDialog {
                 btn3.setVisibility(View.GONE);
             }
 
-            AlertDialog dialog = new AlertDialog.Builder(_context)
-                    .setView(dialogView)
-                    .show();
+            HoloDialog dialog = new HoloDialog(_context, R.style.HoloDialog);
+            dialog.setContentView(dialogView);
+            dialog.show();
 
             btn1.setOnClickListener(new DialogButtonClickListener(dialog, _positiveButtonClickListener, DialogInterface.BUTTON_POSITIVE));
             btn2.setOnClickListener(new DialogButtonClickListener(dialog, _negativeButtonClickListener, DialogInterface.BUTTON_NEGATIVE));
@@ -142,13 +158,12 @@ public class HoloDialog {
         }
     }
 
-
     private static final class DialogButtonClickListener implements View.OnClickListener {
-        private AlertDialog _dialog;
+        private Dialog _dialog;
         private DialogInterface.OnClickListener _listener;
         private int _buttonId;
 
-        private DialogButtonClickListener(AlertDialog dialog, DialogInterface.OnClickListener listener, int buttonId) {
+        private DialogButtonClickListener(Dialog dialog, DialogInterface.OnClickListener listener, int buttonId) {
             _dialog = dialog;
             _listener = listener;
             _buttonId = buttonId;
