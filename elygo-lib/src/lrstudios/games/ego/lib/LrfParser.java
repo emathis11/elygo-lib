@@ -22,6 +22,7 @@ import lrstudios.util.Rect;
 import lrstudios.util.io.BitReader;
 import lrstudios.util.io.BitWriter;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,6 +34,8 @@ import java.util.Stack;
  * See the LRF_SPEC file for more informations about this format.
  */
 public final class LrfParser {
+    public static final String GAMEINFO_TAG_LEVEL = "lrf_level";
+
     private GoGame _game;
     private int _lrf_bits;
     private Rect _lrf_bounds;
@@ -95,8 +98,22 @@ public final class LrfParser {
                 }
             }
         }
-        else
-            System.out.println("No variations stored in this LRF.");
+
+        try {
+            int type = (int) reader.read(4);
+            switch (type) {
+                case 1: // String TODO
+                    break;
+                case 2: // Mark TODO
+                    break;
+
+                case 3: // Level
+                    game.info.putTag(GAMEINFO_TAG_LEVEL, Long.toString(reader.read(8)));
+                    break;
+            }
+        }
+        catch (EOFException ignored) {
+        }
 
         return game;
     }
@@ -119,12 +136,13 @@ public final class LrfParser {
         _game = game;
         String firstPlayer = game.info.firstPlayer;
         boolean reverseColors;
+
         if (firstPlayer != null && firstPlayer.length() > 0) {
             reverseColors = Character.toUpperCase(firstPlayer.charAt(0)) == 'W';
         }
         else {
-            // If the first player to play isn't specified, check the color of the first move
-            // in the variations
+            // If the first player to play isn't specified,
+            // check the color of the first move in the variations
             ArrayList<GameNode> nextNodes = _game.getBaseNode().nextNodes;
             reverseColors = nextNodes != null && !nextNodes.isEmpty() && nextNodes.get(0).color == GoBoard.WHITE;
         }
@@ -145,7 +163,7 @@ public final class LrfParser {
         }
         board.exportLrf(writer);
 
-        // Noeuds
+        // Nodes
         if (game.getBaseNode().nextNodes.size() > 0) {
             writer.write(true);
 
@@ -172,6 +190,13 @@ public final class LrfParser {
         else {
             writer.write(false);
         }
+
+        // Extra data
+        if (_game.info.hasTag(GAMEINFO_TAG_LEVEL)) {
+            writer.write(3, 4);
+            writer.write(Integer.parseInt(_game.info.getTag(GAMEINFO_TAG_LEVEL)), 8);
+        }
+
         writer.flush();
     }
 

@@ -18,6 +18,9 @@
 
 package lrstudios.games.ego.lib;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class GameInfo {
     public double komi;
@@ -185,6 +188,21 @@ public class GameInfo {
     public String originalSgf;
 
 
+    private final Map<String, String> _tags = new HashMap<String, String>();
+
+
     public GameInfo() {
+    }
+
+    public String getTag(String key) {
+        return _tags.get(key);
+    }
+
+    public void putTag(String key, String value) {
+        _tags.put(key, value);
+    }
+
+    public boolean hasTag(String key) {
+        return _tags.get(key) != null;
     }
 }
