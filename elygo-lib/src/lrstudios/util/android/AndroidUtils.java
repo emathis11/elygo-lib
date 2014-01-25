@@ -67,9 +67,8 @@ public class AndroidUtils {
         }
     }
 
-    public static void copyAssetsToMemory(Context context, String fromFolder, String toFolder) throws IOException {
+    public static void copyAssetsToMemory(Context context, String fromFolder, File destDir) throws IOException {
         AssetManager assets = context.getAssets();
-        File destDir = context.getDir(toFolder, Context.MODE_PRIVATE);
         String[] assetList = assets.list(fromFolder);
 
         for (String assetName : assetList) {

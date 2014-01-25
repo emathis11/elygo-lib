@@ -79,19 +79,19 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private int _finalHeight;
     private int _surfaceSmallestSize;
     private int _surfaceLargestSize;
+    private int _stoneSize;
     private int _leftMargin;
     private int _topMargin;
     private float _answerCircleRadius;
     private float _baseGridInterval;
     private float _offsetY;
-    private boolean _isZoom;
     private float _zoomFactor;
-    private int _stoneSize;
     private Point _crossCursor = new Point(-1, -1);
     private Point _moveValidated;
     private Rect _baseBounds;
     private Rect _clipBounds;
     private Rect _tempBounds = new Rect();
+    private boolean _isZoom;
     private boolean _isMoveLegal;
     private boolean _forceRequiresValidation;
     private boolean _forceHideCoordinates;
@@ -101,6 +101,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private boolean _showVariations;
     private boolean _showFinalStatus;
     private boolean _showCoordinates;
+    private boolean _displayNextVariations;
     private boolean _reverseColors;
     private boolean _monocolor;
 
@@ -345,6 +346,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     public void setMonocolor(boolean enable) {
         _monocolor = enable;
         invalidate();
+    }
+
+    public void setDisplayNextVariations(boolean displayNext) {
+        _displayNextVariations = displayNext;
+        invalidate();
+    }
+
+    public boolean displayNextVariations() {
+        return _displayNextVariations;
     }
 
     /**
