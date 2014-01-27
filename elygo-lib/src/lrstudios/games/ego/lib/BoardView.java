@@ -297,15 +297,23 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * Prevents the user to play a move.
      */
     public void lockPlaying() {
-        _playLock = true;
-        moveCrossCursor(null);
+        lockPlaying(true);
+    }
+
+    /**
+     * If set to true, prevents the user to play a move.
+     */
+    public void lockPlaying(boolean lock) {
+        _playLock = lock;
+        if (lock)
+            moveCrossCursor(null);
     }
 
     /**
      * Allows the user to play a move.
      */
     public void unlockPlaying() {
-        _playLock = false;
+        lockPlaying(false);
     }
 
     public void showVariations(boolean show) {
