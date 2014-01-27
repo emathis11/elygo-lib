@@ -614,7 +614,7 @@ public final class SgfParser {
     }
 
     private String _komiToSgfString(double komi) {
-        return String.format("%d.%d", (int) (komi), ((int) Math.round(komi * 10.0) % 10));
+        return String.format("%d.%d", (int) (komi), Math.abs((int) Math.round(komi * 10.0) % 10));
     }
 
 
