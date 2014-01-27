@@ -119,6 +119,12 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
                 getString(R.string.board_move_number, moveNumber) : getString(R.string.board_no_moves));
     }
 
+    protected void setSubtitleMoveNumber(int gameNumber, int moveNumber) {
+        String gameStr = "[" + gameNumber + "] ";
+        getSupportActionBar().setSubtitle(gameStr + ((moveNumber > 0) ?
+                getString(R.string.board_move_number, moveNumber) : getString(R.string.board_no_moves)));
+    }
+
 
     protected void _showSaveDialog(final GoGame game, final String defaultName) {
         _showSaveDialog(game, defaultName, false);
