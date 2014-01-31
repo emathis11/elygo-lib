@@ -33,7 +33,7 @@ import lrstudios.util.android.AndroidUtils;
  * Implements the Sherlock ActionBar and additional utility functions.
  */
 public class BetterFragmentActivity extends SherlockFragmentActivity {
-    private static final String TAG = "BetterFragmentActivity";
+    private static final String TAG = BetterFragmentActivity.class.getSimpleName();
 
     private Menu _optionsMenu;
 
@@ -108,10 +108,8 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
      * Return false if the item was not found.
      */
     protected boolean setOptionItemEnabled(int itemMenuId, boolean enabled) {
-        if (_optionsMenu == null) {
-            Log.w(TAG, "Options Menu is null");
+        if (_optionsMenu == null)
             return false;
-        }
 
         MenuItem item = _optionsMenu.findItem(itemMenuId);
         if (item == null)
