@@ -60,8 +60,8 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.board_activity);
 
         _scoreView = (ScoreView) findViewById(R.id.score_view);
