@@ -341,6 +341,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         showAnswers(!_showAnswers);
     }
 
+    public boolean isAnswerDisplayed() {
+        return _showAnswers;
+    }
+
     /**
      * Reverses (or not) all colors of the current game (only visually, it doesn't alter the game).
      */
