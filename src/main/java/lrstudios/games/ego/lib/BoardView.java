@@ -104,6 +104,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private boolean _displayNextVariations;
     private boolean _reverseColors;
     private boolean _monocolor;
+    private boolean _externalValidation;
 
     private List<BoardAnimation> _anim_prisonersList = new ArrayList<BoardAnimation>();
     private Drawable _anim_captureBlackDrawable;
@@ -143,11 +144,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if (_requiresValidation && !_playLock && _moveValidated != null) {
-                if (_listener != null)
-                    _listener.onPress(_moveValidated.x, _moveValidated.y);
-                moveCrossCursor(null);
-            }
+            if (_requiresValidation && !_playLock && _moveValidated != null && !_externalValidation)
+                validateCurrentMove();
             return true;
         }
 
@@ -260,6 +258,20 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         recreateGraphics();
     }
 
+    public boolean validateCurrentMove() {
+        if (_externalValidation && _crossCursor.x < 0)
+            return false;
+
+        if (_listener != null) {
+            if (_externalValidation)
+                _listener.onPress(_crossCursor.x, _crossCursor.y);
+            else
+                _listener.onPress(_moveValidated.x, _moveValidated.y);
+        }
+        moveCrossCursor(null);
+        return true;
+    }
+
     public void setZoomMargin(int margin) {
         if (margin < 0)
             margin = 0;
@@ -278,7 +290,14 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * Defines whether playing moves needs validation or not (this overrides the preference).
      */
     public void setMoveValidation(boolean needValidation) {
+        _requiresValidation = needValidation;
         _forceRequiresValidation = needValidation;
+    }
+
+    public void setExternalValidation(boolean external) {
+        _requiresValidation = external;
+        _forceRequiresValidation = external;
+        _externalValidation = external;
     }
 
     public void setHideCoordinates(boolean hide) {
