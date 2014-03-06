@@ -87,6 +87,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private float _offsetY;
     private float _zoomFactor;
     private Point _crossCursor = new Point(-1, -1);
+    private Point _fixedCrossCursor;
     private Point _moveValidated;
     private Rect _baseBounds;
     private Rect _clipBounds;
@@ -123,21 +124,22 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private final class BoardGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDown(MotionEvent event) {
-            if (!_playLock) {
-                float x = event.getX();
-                float y = event.getY();
+            if (_playLock)
+                return true;
 
-                if (_requiresValidation) {
-                    final Point coords = _cache_getBoardCoordsAtLocation(x, y);
-                    if (_crossCursor.x >= 0 && _isMoveLegal && coords.equals(_crossCursor.x, _crossCursor.y))
-                        _moveValidated = new Point(coords);
-                    else
-                        _moveValidated = null;
-                }
-                if (_moveValidated == null) {
-                    final Point coords = _cache_getBoardCoordsAtLocation(x, y - _offsetY);
-                    moveCrossCursor(coords);
-                }
+            float x = event.getX();
+            float y = event.getY();
+
+            if (_requiresValidation) {
+                final Point coords = _cache_getBoardCoordsAtLocation(x, y);
+                if (_crossCursor.x >= 0 && _isMoveLegal && coords.equals(_crossCursor.x, _crossCursor.y))
+                    _moveValidated = new Point(coords);
+                else
+                    _moveValidated = null;
+            }
+            if (_moveValidated == null) {
+                final Point coords = _cache_getBoardCoordsAtLocation(x, y - _offsetY);
+                moveCrossCursor(coords);
             }
             return true;
         }
@@ -155,7 +157,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private boolean onUp(MotionEvent event) {
-        if (!_requiresValidation && !_playLock) {
+        if (_playLock)
+            return true;
+
+        if (!_requiresValidation) {
             final Point coords = _cache_getBoardCoordsAtLocation(event.getX(), event.getY() - _offsetY);
 
             if (_crossCursor.x >= 0 && _listener != null && _isInBounds(coords) &&
@@ -165,7 +170,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             }
             moveCrossCursor(null);
         }
-        else if (_requiresValidation && !_isMoveLegal) {
+        else if (!_isMoveLegal) {
             moveCrossCursor(null);
         }
 
@@ -208,9 +213,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         _stdBitmapPaint = new Paint();
         _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
 
-        SurfaceHolder surfaceHolder = getHolder();
-        surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
-        surfaceHolder.addCallback(this);
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+        getHolder().addCallback(this);
     }
 
 
@@ -258,6 +262,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         recreateGraphics();
     }
 
+    /**
+     * Validates the current move. This will send an onPress() event to the listener
+     * if the move was validated successfully.
+     */
     public boolean validateCurrentMove() {
         if (_externalValidation && _crossCursor.x < 0)
             return false;
@@ -323,8 +331,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * If set to true, prevents the user to play a move.
      */
     public void lockPlaying(boolean lock) {
+        lockPlaying(lock, false);
+    }
+
+    public void lockPlaying(boolean lock, boolean lockCrossCursor) {
         _playLock = lock;
-        if (lock)
+        if (lock && !lockCrossCursor)
             moveCrossCursor(null);
     }
 
@@ -395,6 +407,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         return _theme;
     }
 
+
+    public void setFixedCrossCursor(Point coords) {
+        _fixedCrossCursor = coords;
+        invalidate();
+    }
 
     /**
      * Draws the cross cursor to the specified location.
@@ -746,11 +763,14 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Cross cursor
-        if (_crossCursor.x >= 0) {
-            int x = _crossCursor.x - _clipBounds.left;
-            int y = _crossCursor.y - _clipBounds.top;
+        boolean useFixedCursor = _fixedCrossCursor != null;
+        Point crossCursor = useFixedCursor ? _fixedCrossCursor : _crossCursor;
 
-            Paint paint = _isMoveLegal ? _theme.crossCursorPaint : _theme.illegalCrossCursorPaint;
+        if (crossCursor.x >= 0) {
+            int x = crossCursor.x - _clipBounds.left;
+            int y = crossCursor.y - _clipBounds.top;
+
+            Paint paint = (useFixedCursor || _isMoveLegal) ? _theme.crossCursorPaint : _theme.illegalCrossCursorPaint;
             canvas.drawLine(
                     _stoneSize * x + _stoneSize / 2f, -_topMargin,
                     _stoneSize * x + _stoneSize / 2f, _surfaceHeight - _topMargin, paint);
@@ -758,7 +778,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                     -_leftMargin, _stoneSize * y + _stoneSize / 2f,
                     _surfaceWidth - _leftMargin, _stoneSize * y + _stoneSize / 2f, paint);
 
-            if (_isMoveLegal) {
+            if (useFixedCursor || _isMoveLegal) {
                 Drawable cursor;
                 byte nextPlayer = _game.getNextPlayer();
                 if (nextPlayer == GoBoard.ANY)
@@ -849,8 +869,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private boolean _isInBounds(int x, int y) {
-        return x >= _clipBounds.left && x <= _clipBounds.right
-                && y >= _clipBounds.top && y <= _clipBounds.bottom;
+        return _clipBounds == null || (x >= _clipBounds.left && x <= _clipBounds.right
+                && y >= _clipBounds.top && y <= _clipBounds.bottom);
     }
 
 
