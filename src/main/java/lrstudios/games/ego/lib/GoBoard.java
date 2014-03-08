@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Represents a go board.
  */
-public final class GoBoard {
+public final class GoBoard implements Cloneable {
     // Constantes
     public static final byte
             EMPTY = 0,
@@ -74,6 +74,19 @@ public final class GoBoard {
     public GoBoard(int size, byte[] colors) {
         _size = size;
         _board = colors;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        super.clone();
+        GoBoard clone = new GoBoard(_size);
+
+        System.arraycopy(_board, 0, clone._board, 0, _board.length);
+        clone._marks = new ArrayList<BoardMark>();
+        clone._marks.addAll(_marks);
+        clone._ko_prisoner = new Coords();
+        clone._ko_prisoner.set(_ko_prisoner.x, _ko_prisoner.y);
+        return clone;
     }
 
     /**

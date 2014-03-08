@@ -33,8 +33,6 @@ public class GoGame {
 
     public static final int BASE_NODE_COORD = -9;
 
-
-    // Variables
     public GameInfo info = new GameInfo();
     public int gameNumber;
     public GoBoard board;
@@ -51,6 +49,10 @@ public class GoGame {
     protected GameNode _baseNode;
     protected GameNode _currentNode;
     protected GameNode _playNode;
+
+    private boolean[][] _loop_passed;
+    private int _loop_markStoneType;
+    private int _loop_markCount;
 
 
     /**
@@ -399,6 +401,95 @@ public class GoGame {
 
         for (GameNode nextMove : move.nextNodes)
             _rotateMovesCCW_loop(nextMove);
+    }
+
+    // TODO implement other rules than Japanese (and move the compute engine in another class)
+    public Result computeTerritories() {
+        GoBoard tempBoard;
+        try {
+            tempBoard = (GoBoard) board.clone();
+        }
+        catch (CloneNotSupportedException e) { throw new RuntimeException(e); }
+
+        Result result = new Result();
+        result.whitePrisoners = _whitePrisoners;
+        result.blackPrisoners = _blackPrisoners;
+
+        for (int x = 0; x < _size; x++) {
+            for (int y = 0; y < _size; y++) {
+                byte color = finalStatus.getColor(x, y);
+
+                if (color == GoBoard.DEAD_BLACK_STONE || color == GoBoard.DEAD_WHITE_STONE) {
+                    List<Coords> removed = tempBoard.removeStones(x, y);
+                    for (Coords coords : removed)
+                        finalStatus.set(coords.x, coords.y, GoBoard.EMPTY);
+
+                    if (color == GoBoard.DEAD_BLACK_STONE)
+                        result.whitePrisoners += removed.size();
+                    else
+                        result.blackPrisoners += removed.size();
+                }
+            }
+        }
+
+        _loop_passed = new boolean[_size][_size];
+        for (int x = 0; x < _size; x++) {
+            for (int y = 0; y < _size; y++) {
+                byte color = tempBoard.getColor(x, y);
+
+                if (_loop_passed[x][y] || color != GoBoard.EMPTY)
+                    continue;
+
+                _loop_markStoneType = 0;
+                _loop_markCount = 0;
+                _markPoints_loop(tempBoard, x, y);
+
+                if (_loop_markStoneType == GoBoard.BLACK)
+                    result.blackTerritory += _loop_markCount;
+                else
+                    result.whiteTerritory += _loop_markCount;
+            }
+        }
+
+        result.komi = info.komi;
+        return result;
+    }
+
+    private void _markPoints_loop(GoBoard markBoard, int x, int y) {
+        if (_loop_passed[x][y])
+            return;
+
+        _loop_passed[x][y] = true;
+        _loop_markCount++;
+
+        if (x + 1 < _size) {
+            byte color = markBoard.getColor(x + 1, y);
+            if (color == GoBoard.EMPTY)
+                _markPoints_loop(markBoard, x + 1, y);
+            else
+                _loop_markStoneType |= color;
+        }
+        if (x - 1 >= 0) {
+            byte color = markBoard.getColor(x - 1, y);
+            if (color == GoBoard.EMPTY)
+                _markPoints_loop(markBoard, x - 1, y);
+            else
+                _loop_markStoneType |= color;
+        }
+        if (y + 1 < _size) {
+            byte color = markBoard.getColor(x, y + 1);
+            if (color == GoBoard.EMPTY)
+                _markPoints_loop(markBoard, x, y + 1);
+            else
+                _loop_markStoneType |= color;
+        }
+        if (y - 1 >= 0) {
+            byte color = markBoard.getColor(x, y - 1);
+            if (color == GoBoard.EMPTY)
+                _markPoints_loop(markBoard, x, y - 1);
+            else
+                _loop_markStoneType |= color;
+        }
     }
 
 
@@ -810,5 +901,14 @@ public class GoGame {
                 this.removedStones.clear();
             this.removedStones.addAll(removedStones);
         }
+    }
+
+
+    public static final class Result {
+        public int whiteTerritory;
+        public int blackTerritory;
+        public int whitePrisoners;
+        public int blackPrisoners;
+        public double komi;
     }
 }
