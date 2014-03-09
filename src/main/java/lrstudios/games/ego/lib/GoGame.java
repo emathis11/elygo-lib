@@ -52,7 +52,7 @@ public class GoGame {
 
     private boolean[][] _loop_passed;
     private int _loop_markStoneType;
-    private int _loop_markCount;
+    private int _loop_count;
 
 
     /**
@@ -403,6 +403,23 @@ public class GoGame {
             _rotateMovesCCW_loop(nextMove);
     }
 
+    public void toggleDeadGroup(int x, int y) {
+        if (board.isEmpty(x, y))
+            return;
+
+        byte color = board.getColor(x, y);
+        List<Coords> coords = board.listStonesInGroup(x, y, false);
+        for (Coords pt : coords) {
+            byte fsColor;
+            if (color == GoBoard.BLACK)
+                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_BLACK_STONE ? GoBoard.BLACK : GoBoard.DEAD_BLACK_STONE;
+            else
+                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_WHITE_STONE ? GoBoard.WHITE : GoBoard.DEAD_WHITE_STONE;
+
+            finalStatus.set(pt.x, pt.y, fsColor);
+        }
+    }
+
     // TODO implement other rules than Japanese (and move the compute engine in another class)
     public Result computeTerritories() {
         GoBoard tempBoard;
@@ -441,13 +458,13 @@ public class GoGame {
                     continue;
 
                 _loop_markStoneType = 0;
-                _loop_markCount = 0;
+                _loop_count = 0;
                 _markPoints_loop(tempBoard, x, y);
 
                 if (_loop_markStoneType == GoBoard.BLACK)
-                    result.blackTerritory += _loop_markCount;
+                    result.blackTerritory += _loop_count;
                 else
-                    result.whiteTerritory += _loop_markCount;
+                    result.whiteTerritory += _loop_count;
             }
         }
 
@@ -460,7 +477,7 @@ public class GoGame {
             return;
 
         _loop_passed[x][y] = true;
-        _loop_markCount++;
+        _loop_count++;
 
         if (x + 1 < _size) {
             byte color = markBoard.getColor(x + 1, y);

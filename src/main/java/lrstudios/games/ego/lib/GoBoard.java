@@ -56,7 +56,8 @@ public final class GoBoard implements Cloneable {
 
     private boolean[] _loop_passed;
     private byte _loop_color;
-    private ArrayList<Coords> _loop_captured;
+    private boolean _loop_removeStones;
+    private ArrayList<Coords> _loop_stoneList;
 
     private Coords _ko_prisoner;
 
@@ -84,8 +85,8 @@ public final class GoBoard implements Cloneable {
         System.arraycopy(_board, 0, clone._board, 0, _board.length);
         clone._marks = new ArrayList<BoardMark>();
         clone._marks.addAll(_marks);
-        clone._ko_prisoner = new Coords();
-        clone._ko_prisoner.set(_ko_prisoner.x, _ko_prisoner.y);
+        if (_ko_prisoner != null)
+            clone._ko_prisoner = new Coords(_ko_prisoner.x, _ko_prisoner.y);
         return clone;
     }
 
@@ -122,6 +123,11 @@ public final class GoBoard implements Cloneable {
      */
     public byte getColor(int x, int y) {
         return _board[y * _size + x];
+    }
+
+    public boolean isEmpty(int x, int y) {
+        byte color = getColor(x, y);
+        return color != GoBoard.WHITE && color != GoBoard.BLACK;
     }
 
     /**
@@ -301,24 +307,35 @@ public final class GoBoard implements Cloneable {
      * if the specified intersection is empty.
      */
     public List<Coords> removeStones(int x, int y) {
+        return listStonesInGroup(x, y, true);
+    }
+
+    public List<Coords> listStonesInGroup(int x, int y, boolean removeStones) {
         _loop_color = getColor(x, y);
         if (_loop_color == EMPTY)
             return null;
 
-        _loop_captured = new ArrayList<Coords>();
+        _loop_stoneList = new ArrayList<Coords>();
+        _loop_removeStones = removeStones;
+        _loop_passed = new boolean[_size * _size];
 
         removeStones_loop(x, y);
 
-        return _loop_captured;
+        return _loop_stoneList;
     }
 
     /**
      * Used by removeStones() as a recursive function to remove a group of stones from the board.
      */
     private void removeStones_loop(int x, int y) {
-        // Enlever la pierre
-        set(x, y, EMPTY);
-        _loop_captured.add(new Coords(x, y));
+        if (_loop_passed[y * _size + x])
+            return;
+
+        if (_loop_removeStones)
+            set(x, y, EMPTY);
+
+        _loop_passed[y * _size + x] = true;
+        _loop_stoneList.add(new Coords(x, y));
 
         if (x + 1 < _size && getColor(x + 1, y) == _loop_color)
             removeStones_loop(x + 1, y);
