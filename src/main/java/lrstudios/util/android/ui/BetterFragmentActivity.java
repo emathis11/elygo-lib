@@ -120,6 +120,18 @@ public class BetterFragmentActivity extends ActionBarActivity {
         return true;
     }
 
+    protected boolean setOptionItemVisible(int itemMenuId, boolean visible) {
+        if (_optionsMenu == null)
+            return false;
+
+        MenuItem item = _optionsMenu.findItem(itemMenuId);
+        if (item == null)
+            return false;
+
+        item.setVisible(visible);
+        return true;
+    }
+
     /**
      * Disables the specified item of the Action Bar.
      * Return false if the item was not found.
