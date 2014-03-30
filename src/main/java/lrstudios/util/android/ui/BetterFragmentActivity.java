@@ -40,8 +40,8 @@ public class BetterFragmentActivity extends ActionBarActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
