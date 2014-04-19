@@ -89,7 +89,7 @@ public class HoloDialog extends Dialog {
 
         public Builder setNeutralButton(int stringResId, DialogInterface.OnClickListener clickListener) {
             _neutralButton = _context.getString(stringResId);
-            _negativeButtonClickListener = clickListener;
+            _neutralButtonClickListener = clickListener;
             return this;
         }
 
