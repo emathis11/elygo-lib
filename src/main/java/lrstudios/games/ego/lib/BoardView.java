@@ -755,10 +755,21 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
                 int x = node.x - _clipBounds.left;
                 int y = node.y - _clipBounds.top;
+
                 canvas.drawCircle(
                         _stoneSize * x + _stoneSize / 2,
                         _stoneSize * y + _stoneSize / 2,
-                        _answerCircleRadius, (node.value > 0) ? _theme.goodVariationPaint : _theme.badVariationPaint);
+                        _answerCircleRadius,
+                        (node.value > 0) ? _theme.goodVariationPaint : _theme.badVariationPaint);
+
+                if (node.value > 0) {
+                    _theme.goodVariationPaint2.setStrokeWidth(_answerCircleRadius / 2.7f);
+                    canvas.drawCircle(
+                            _stoneSize * x + _stoneSize / 2,
+                            _stoneSize * y + _stoneSize / 2,
+                            _answerCircleRadius * 1.5f,
+                            _theme.goodVariationPaint2);
+                }
             }
         }
 

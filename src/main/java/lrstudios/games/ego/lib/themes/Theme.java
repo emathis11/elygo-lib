@@ -48,6 +48,7 @@ public abstract class Theme {
     public Paint crossCursorPaint;
     public Paint illegalCrossCursorPaint;
     public Paint goodVariationPaint;
+    public Paint goodVariationPaint2;
     public Paint badVariationPaint;
 
     public Paint coordinatesPaint;
@@ -131,6 +132,11 @@ public abstract class Theme {
         goodVariationPaint = new Paint();
         goodVariationPaint.setAntiAlias(true);
         goodVariationPaint.setColor(Color.rgb(0, 200, 0));
+
+        goodVariationPaint2 = new Paint();
+        goodVariationPaint2.setAntiAlias(true);
+        goodVariationPaint2.setColor(Color.rgb(0, 200, 0));
+        goodVariationPaint2.setStyle(Paint.Style.STROKE);
 
         badVariationPaint = new Paint();
         badVariationPaint.setAntiAlias(true);
