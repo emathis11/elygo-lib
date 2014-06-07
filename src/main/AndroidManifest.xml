@@ -1,8 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="lrstudios.games.ego.lib">
-
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="19" />
+<manifest package="lrstudios.games.ego.lib">
 
     <application />
-
 </manifest>
