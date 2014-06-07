@@ -86,6 +86,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private float _offsetY;
     private float _zoomFactor;
     private Point _crossCursor = new Point(-1, -1);
+    private Point _prevCrossCursor = new Point(-1, -1);
     private Point _fixedCrossCursor;
     private Point _moveValidated;
     private Rect _baseBounds;
@@ -430,6 +431,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
         else {
             _crossCursor.set(-1, -1);
+        }
+
+        if (!_prevCrossCursor.equals(_crossCursor.x, _crossCursor.y)) {
+            if (_listener != null)
+                _listener.onCursorMoved(_crossCursor.x, _crossCursor.y);
+            _prevCrossCursor.set(_crossCursor.x, _crossCursor.y);
         }
         invalidate(); // TODO repaint cross cursor only
     }
@@ -952,6 +959,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     public interface BoardListener {
         /** Called when the user clicks on an intersection of the board. */
         void onPress(int x, int y);
+
+        /** Called when the user moves the cross cursor to a new location. */
+        void onCursorMoved(int x, int y);
     }
 
     public interface InitListener {

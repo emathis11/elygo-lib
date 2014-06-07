@@ -34,7 +34,6 @@ import lrstudios.games.ego.lib.*;
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
@@ -228,6 +227,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         else {
             Log.w(TAG, "The move is illegal : " + x + ", " + y);
         }
+    }
+
+    @Override
+    public void onCursorMoved(int x, int y) {
     }
 
 
