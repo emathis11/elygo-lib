@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -263,11 +262,18 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
+     * Gets the current cursor position (never null, but it's set to -1,-1 if no intersection is selected).
+     */
+    public Point getCursorPosition() {
+        return _crossCursor;
+    }
+
+    /**
      * Validates the current move. This will send an onPress() event to the listener
      * if the move was validated successfully.
      */
     public boolean validateCurrentMove() {
-        if (_externalValidation && _crossCursor.x < 0)
+        if (_crossCursor.x < 0)
             return false;
 
         if (_listener != null) {
@@ -276,6 +282,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             else
                 _listener.onPress(_moveValidated.x, _moveValidated.y);
         }
+
         moveCrossCursor(null);
         return true;
     }
