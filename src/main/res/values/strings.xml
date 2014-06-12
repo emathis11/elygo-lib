@@ -50,7 +50,7 @@
     </string>
 
     <!-- Game Info Dialog -->
-    <string name="dialog_title_gameinfo">Details</string>
+    <string name="dialog_title_gameinfo">Game details</string>
     <string name="hint_black_name">Black name</string>
     <string name="hint_white_name">White name</string>
     <string name="hint_player_rank">Lv.</string>
@@ -63,9 +63,9 @@
     <string name="pref_appearance">Appearance</string>
     <string name="pref_sound">Sound</string>
     <string name="pref_wakelock">Keep screen on</string>
-    <string name="pref_wakelock_desc">Only if a board is open</string>
+    <string name="pref_wakelock_desc">Only if a board is opened</string>
     <string name="pref_statusbar">Hide Status bar</string>
-    <string name="pref_statusbar_desc">Only if a board is open</string>
+    <string name="pref_statusbar_desc">Only if a board is opened</string>
     <string name="pref_fastinput">Requires validation</string>
     <string name="pref_fastinput_off">Moves are played immediately</string>
     <string name="pref_fastinput_on">Playing a move requires validation (a second tap)</string>

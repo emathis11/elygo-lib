@@ -46,13 +46,11 @@ public final class GoBoard implements Cloneable {
 
     private static final byte DATA_TYPE_MARK = 1;
 
-    private static final String TAG = "GoBoard";
-
 
     // Variables
     private int _size;
     private byte[] _board;
-    private ArrayList<BoardMark> _marks = new ArrayList<BoardMark>();
+    private ArrayList<BoardMark> _marks = new ArrayList<>();
 
     private boolean[] _loop_passed;
     private byte _loop_color;
@@ -77,13 +75,12 @@ public final class GoBoard implements Cloneable {
         _board = colors;
     }
 
-    @Override
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
         GoBoard clone = new GoBoard(_size);
 
         System.arraycopy(_board, 0, clone._board, 0, _board.length);
-        clone._marks = new ArrayList<BoardMark>();
+        clone._marks = new ArrayList<>();
         clone._marks.addAll(_marks);
         if (_ko_prisoner != null)
             clone._ko_prisoner = new Coords(_ko_prisoner.x, _ko_prisoner.y);
@@ -313,9 +310,9 @@ public final class GoBoard implements Cloneable {
     public List<Coords> listStonesInGroup(int x, int y, boolean removeStones) {
         _loop_color = getColor(x, y);
         if (_loop_color == EMPTY)
-            return null;
+            return new ArrayList<>();
 
-        _loop_stoneList = new ArrayList<Coords>();
+        _loop_stoneList = new ArrayList<>();
         _loop_removeStones = removeStones;
         _loop_passed = new boolean[_size * _size];
 

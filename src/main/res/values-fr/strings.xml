@@ -48,7 +48,7 @@
     <string name="overwrite_warning">Une partie avec ce nom existe déjà. Si vous continuez, elle sera écrasée.</string>
 
     <!-- Game Info Dialog -->
-    <string name="dialog_title_gameinfo">Informations</string>
+    <string name="dialog_title_gameinfo">Détails de la partie</string>
     <string name="hint_black_name">Joueur noir</string>
     <string name="hint_white_name">Joueur blanc</string>
     <string name="hint_player_rank">Niv.</string>

@@ -51,6 +51,7 @@ public class GoGame {
     protected GameNode _playNode;
 
     private boolean[][] _loop_passed;
+    private boolean[][] _loop_localPassed;
     private int _loop_markStoneType;
     private int _loop_count;
 
@@ -412,9 +413,9 @@ public class GoGame {
         for (Coords pt : coords) {
             byte fsColor;
             if (color == GoBoard.BLACK)
-                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_BLACK_STONE ? GoBoard.BLACK : GoBoard.DEAD_BLACK_STONE;
+                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_BLACK_STONE ? GoBoard.EMPTY : GoBoard.DEAD_BLACK_STONE;
             else
-                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_WHITE_STONE ? GoBoard.WHITE : GoBoard.DEAD_WHITE_STONE;
+                fsColor = finalStatus.getColor(pt.x, pt.y) == GoBoard.DEAD_WHITE_STONE ? GoBoard.EMPTY : GoBoard.DEAD_WHITE_STONE;
 
             finalStatus.set(pt.x, pt.y, fsColor);
         }
@@ -435,12 +436,13 @@ public class GoGame {
         for (int x = 0; x < _size; x++) {
             for (int y = 0; y < _size; y++) {
                 byte color = finalStatus.getColor(x, y);
+                if (color == GoBoard.WHITE_TERRITORY || color == GoBoard.BLACK_TERRITORY) {
+                    finalStatus.set(x, y, GoBoard.EMPTY);
+                    continue;
+                }
 
                 if (color == GoBoard.DEAD_BLACK_STONE || color == GoBoard.DEAD_WHITE_STONE) {
                     List<Coords> removed = tempBoard.removeStones(x, y);
-                    for (Coords coords : removed)
-                        finalStatus.set(coords.x, coords.y, GoBoard.EMPTY);
-
                     if (color == GoBoard.DEAD_BLACK_STONE)
                         result.whitePrisoners += removed.size();
                     else
@@ -450,6 +452,7 @@ public class GoGame {
         }
 
         _loop_passed = new boolean[_size][_size];
+        _loop_localPassed = new boolean[_size][_size];
         for (int x = 0; x < _size; x++) {
             for (int y = 0; y < _size; y++) {
                 byte color = tempBoard.getColor(x, y);
@@ -457,6 +460,8 @@ public class GoGame {
                 if (_loop_passed[x][y] || color != GoBoard.EMPTY)
                     continue;
 
+                for (int iX = 0; iX < _size; iX++)
+                    Arrays.fill(_loop_localPassed[iX], false);
                 _loop_markStoneType = 0;
                 _loop_count = 0;
                 _markPoints_loop(tempBoard, x, y);
@@ -465,6 +470,18 @@ public class GoGame {
                     result.blackTerritory += _loop_count;
                 else
                     result.whiteTerritory += _loop_count;
+
+                if (_loop_markStoneType == GoBoard.BLACK || _loop_markStoneType == GoBoard.WHITE) {
+                    for (int iX = 0; iX < _size; iX++) {
+                        for (int iY = 0; iY < _size; iY++) {
+                            byte inColor = finalStatus.getColor(iX, iY);
+                            if (inColor == GoBoard.EMPTY && tempBoard.getColor(iX, iY) == GoBoard.EMPTY) {
+                                finalStatus.set(iX, iY, _loop_markStoneType == GoBoard.BLACK
+                                        ? GoBoard.BLACK_TERRITORY : GoBoard.WHITE_TERRITORY);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -477,6 +494,7 @@ public class GoGame {
             return;
 
         _loop_passed[x][y] = true;
+        _loop_localPassed[x][y] = true;
         _loop_count++;
 
         if (x + 1 < _size) {
@@ -515,7 +533,7 @@ public class GoGame {
      */
     public Collection<LightCoords> getLastPrisoners() {
         if (_playedMoves.empty())
-            return new ArrayList<LightCoords>();
+            return new ArrayList<>();
 
         MoveInfo info = _playedMoves.peek();
         return (info.prisoners != null) ? info.prisoners : new ArrayList<LightCoords>();
