@@ -25,10 +25,7 @@ import android.graphics.Path.Direction;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
-import android.util.Log;
-import lrstudios.games.ego.lib.LibConfig;
 import lrstudios.games.ego.lib.R;
-import lrstudios.games.ego.lib.TypefaceCache;
 
 
 public abstract class Theme {
@@ -123,11 +120,11 @@ public abstract class Theme {
 
         crossCursorPaint = new Paint();
         crossCursorPaint.setColor(Color.rgb(158, 55, 158));
-        crossCursorPaint.setStrokeWidth(3);
+        crossCursorPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.cross_cursor_size));
 
         illegalCrossCursorPaint = new Paint();
         illegalCrossCursorPaint.setColor(Color.rgb(232, 25, 25));
-        illegalCrossCursorPaint.setStrokeWidth(2);
+        illegalCrossCursorPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.cross_cursor_size));
 
         goodVariationPaint = new Paint();
         goodVariationPaint.setAntiAlias(true);

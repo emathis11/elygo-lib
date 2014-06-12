@@ -10,6 +10,8 @@
 
     <dimen name="stone_input_offset">48dp</dimen>
 
-    <dimen name="alert_dialog_title_height">64dip</dimen>
-    <dimen name="alert_dialog_button_bar_height">48dip</dimen>
+    <dimen name="alert_dialog_title_height">64dp</dimen>
+    <dimen name="alert_dialog_button_bar_height">48dp</dimen>
+
+    <dimen name="cross_cursor_size">2dp</dimen>
 </resources>
