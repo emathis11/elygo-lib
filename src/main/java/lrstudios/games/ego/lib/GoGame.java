@@ -689,7 +689,7 @@ public class GoGame {
      * Returns the actual representation of the game in a SGF string.
      */
     public String getSgf() {
-        return new SgfParser().toSgfString(this);
+        return new SgfParser().toSgfString(this, true);
     }
 
     /**

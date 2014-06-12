@@ -61,7 +61,6 @@ public final class SgfParser {
     private Writer _writer;
     private GoGame _game;
     private IOException _exception;
-    private int _nodeCount;
     private GameInfo _gameInfo;
     private boolean _optimized;
     private boolean _infoOnly;
@@ -87,9 +86,8 @@ public final class SgfParser {
     public GoGame[] parse(InputStream stream) throws IOException {
         Reader reader = new BufferedReader(new InputStreamReader(stream), 1024);
         _reader = _infoOnly ? new CopyPushbackReader(reader) : new PushbackReader(reader);
-        _nodeCount = 0;
-        _baseNodes = new ArrayList<GameNode>(1);
-        _gameInfos = new ArrayList<GameInfo>(1);
+        _baseNodes = new ArrayList<>(1);
+        _gameInfos = new ArrayList<>(1);
 
         _parse_loop(null);
         if (_infoOnly && _gameInfo != null)
@@ -104,7 +102,7 @@ public final class SgfParser {
         // Parse as problems :
         // Try to know which problem format is used to set the move values properly
         if (_parseOptions._parseAsProblems) {
-            ArrayList<GoGame> newGames = new ArrayList<GoGame>();
+            ArrayList<GoGame> newGames = new ArrayList<>();
             for (GoGame game : games) {
                 GameNode baseNode = game.getBaseNode();
                 // If the board is empty at the beginning, it means that the problems are stored
@@ -137,7 +135,7 @@ public final class SgfParser {
         GameNode baseNode = game.getBaseNode();
 
         // Try to find move comments indicating good and bad variations
-        Stack<GameNode> stack = new Stack<GameNode>();
+        Stack<GameNode> stack = new Stack<>();
         stack.push(baseNode);
         while (!stack.empty()) {
             GameNode node = stack.pop();
@@ -161,7 +159,7 @@ public final class SgfParser {
 
         if (baseNode.value < 100) {
             // No solution found, we assume all are valid
-            stack = new Stack<GameNode>();
+            stack = new Stack<>();
             stack.add(baseNode);
             while (!stack.empty()) {
                 GameNode node = stack.pop();
@@ -271,7 +269,6 @@ public final class SgfParser {
             node.setStones.trimToSize();
         if (node.boardMarks != null)
             node.boardMarks.trimToSize();
-        _nodeCount++;
         return node;
     }
 
@@ -483,9 +480,9 @@ public final class SgfParser {
                 _writer.write(colorChar + "[" + coordsToString(node.x, node.y) + "]");
         }
         if (node.setStones != null && node.setStones.size() > 0) {
-            List<LightCoords> whiteList = new ArrayList<LightCoords>();
-            List<LightCoords> blackList = new ArrayList<LightCoords>();
-            List<LightCoords> emptyList = new ArrayList<LightCoords>();
+            List<LightCoords> whiteList = new ArrayList<>();
+            List<LightCoords> blackList = new ArrayList<>();
+            List<LightCoords> emptyList = new ArrayList<>();
 
             for (LightCoords coords : node.setStones) {
                 if (coords.color == GoBoard.WHITE)
@@ -516,11 +513,11 @@ public final class SgfParser {
         // Marks
         if (node.boardMarks != null) {
             // TODO optimize
-            ArrayList<BoardMark> triangles = new ArrayList<BoardMark>();
-            ArrayList<BoardMark> circles = new ArrayList<BoardMark>();
-            ArrayList<BoardMark> squares = new ArrayList<BoardMark>();
-            ArrayList<BoardMark> cross = new ArrayList<BoardMark>();
-            ArrayList<BoardMark> labels = new ArrayList<BoardMark>();
+            ArrayList<BoardMark> triangles = new ArrayList<>();
+            ArrayList<BoardMark> circles = new ArrayList<>();
+            ArrayList<BoardMark> squares = new ArrayList<>();
+            ArrayList<BoardMark> cross = new ArrayList<>();
+            ArrayList<BoardMark> labels = new ArrayList<>();
             for (BoardMark mark : node.boardMarks) {
                 switch (mark.type) {
                     case BoardMark.MARK_TRIANGLE:
@@ -583,12 +580,15 @@ public final class SgfParser {
 
 
     /**
-     * Converts the specified {@link GoGame} in a SGF[4] string.
+     * Converts the specified {@link GoGame} into a SGF[4] string.
      */
-    public String toSgfString(GoGame game) {
+    public String toSgfString(GoGame game, boolean optimize) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
         try {
-            saveOptimized(game, outputStream);
+            if (optimize)
+                saveOptimized(game, outputStream);
+            else
+                save(game, outputStream);
             String sgf = outputStream.toString();
             outputStream.close();
             return sgf;
@@ -678,8 +678,9 @@ public final class SgfParser {
     public static final class ParseOptions {
         private boolean _parseAsProblems;
 
-        public void parseAsProblems(boolean b) {
-            _parseAsProblems = b;
+        public ParseOptions parseAsProblems(boolean parse) {
+            _parseAsProblems = parse;
+            return this;
         }
     }
 
