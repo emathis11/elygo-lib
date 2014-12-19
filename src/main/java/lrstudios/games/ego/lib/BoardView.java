@@ -82,9 +82,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private int _leftMargin;
     private int _topMargin;
     private float _answerCircleRadius;
-    private float _baseGridInterval;
     private float _offsetY;
-    private float _zoomFactor;
     private Point _crossCursor = new Point(-1, -1);
     private Point _prevCrossCursor = new Point(-1, -1);
     private Point _fixedCrossCursor;
@@ -459,8 +457,6 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         if (_surfaceWidth <= 0 || _surfaceHeight <= 0)
             return;
 
-        _baseGridInterval = _surfaceSmallestSize / (float) _size;
-
         _computeDimensions(_isZoom && _baseBounds == null);
 
         if (!_offsetLarge || (_clipBounds.width() > 15 && _clipBounds.height() > 15))
@@ -470,7 +466,6 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
         _leftMargin = (_surfaceWidth - _finalWidth) / 2;
         _topMargin = (_surfaceHeight - _finalHeight) / 2;
-        _zoomFactor = _stoneSize / _baseGridInterval;
         _crossCursor.set(-1, -1);
 
         Theme.Config config = new Theme.Config(

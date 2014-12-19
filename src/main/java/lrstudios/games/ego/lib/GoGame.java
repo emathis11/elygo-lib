@@ -26,7 +26,7 @@ import java.util.*;
 
 
 /**
- * Represents a go game, which can contain a variation tree and other informations.
+ * Represents a go game that contains a move tree and some other informations.
  */
 public class GoGame {
     private static final String TAG = "GoGame";
