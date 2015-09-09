@@ -19,21 +19,16 @@
 package lrstudios.util.android.ui;
 
 import android.app.AlertDialog;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import lrstudios.games.ego.lib.R;
+
 import lrstudios.util.android.AndroidUtils;
 
 
-/**
- * Implements the Sherlock ActionBar and additional utility functions.
- */
-public class BetterFragmentActivity extends ActionBarActivity {
+public class BetterFragmentActivity extends AppCompatActivity {
     private static final String TAG = BetterFragmentActivity.class.getSimpleName();
 
     private Menu _optionsMenu;
