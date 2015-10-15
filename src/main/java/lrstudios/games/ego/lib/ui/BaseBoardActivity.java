@@ -39,6 +39,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
+
 import lrstudios.games.ego.lib.BoardView;
 import lrstudios.games.ego.lib.GoGame;
 import lrstudios.games.ego.lib.R;
@@ -46,12 +53,6 @@ import lrstudios.games.ego.lib.Utils;
 import lrstudios.games.ego.lib.util.SoundHelper;
 import lrstudios.util.android.AndroidUtils;
 import lrstudios.util.android.ui.BetterFragmentActivity;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Random;
 
 
 /**
@@ -84,7 +85,6 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         _soundHelper = new SoundHelper(this);
-
         _internalGamesDir = getDir("SGF", Context.MODE_PRIVATE);
         _loadPreferences();
     }

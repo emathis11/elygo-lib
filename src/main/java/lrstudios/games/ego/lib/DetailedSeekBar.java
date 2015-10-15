@@ -8,8 +8,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 
 public class DetailedSeekBar extends RelativeLayout implements SeekBar.OnSeekBarChangeListener {
     private static Formatter _defaultFormatter;

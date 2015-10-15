@@ -2,6 +2,7 @@ package lrstudios.games.ego.lib.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
 import lrstudios.games.ego.lib.R;
 
 

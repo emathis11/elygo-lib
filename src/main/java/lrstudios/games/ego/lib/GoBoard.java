@@ -19,13 +19,14 @@
 package lrstudios.games.ego.lib;
 
 import android.graphics.Rect;
-import lrstudios.util.io.BitReader;
-import lrstudios.util.io.BitWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import lrstudios.util.io.BitReader;
+import lrstudios.util.io.BitWriter;
 
 
 /**

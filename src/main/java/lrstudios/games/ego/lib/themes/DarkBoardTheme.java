@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Paint;
 import android.graphics.Shader;
+
 import lrstudios.games.ego.lib.R;
 
 

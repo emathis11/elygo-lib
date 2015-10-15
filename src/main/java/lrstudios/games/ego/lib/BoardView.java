@@ -21,7 +21,11 @@ package lrstudios.games.ego.lib;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -33,16 +37,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import lrstudios.games.ego.lib.themes.BlackWhiteTheme;
 import lrstudios.games.ego.lib.themes.DarkBoardTheme;
 import lrstudios.games.ego.lib.themes.StandardTheme;
 import lrstudios.games.ego.lib.themes.Theme;
 import lrstudios.games.ego.lib.util.GoUtils;
 import lrstudios.util.android.AndroidUtils;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**

@@ -22,7 +22,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -30,13 +29,17 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
-import lrstudios.games.ego.lib.Utils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Properties;
+
+import lrstudios.games.ego.lib.Utils;
 
 
 public class AndroidUtils {
