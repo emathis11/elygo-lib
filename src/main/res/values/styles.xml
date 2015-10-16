@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="actionBarStyle">@style/ActionBar</item>
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
@@ -11,7 +11,6 @@
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="titleTextAppearance">@style/ActionBar_TitleText</item>
         <item name="subtitleTextAppearance">@style/ActionBar_SubtitleText</item>
-        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
     </style>
 
     <style name="ActionBar_TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
