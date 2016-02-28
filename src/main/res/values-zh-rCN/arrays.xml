@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themePref">
+        <item>木质棋盘</item>
+        <item>木质棋盘 #2</item>
+        <item>纸</item>
+    </string-array>
+</resources>
