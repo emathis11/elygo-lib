@@ -1,12 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/toolbar_with_progress" />
 
-    <ScrollView
-        android:id="@+id/fragment_container"
+    <lrstudios.games.ego.lib.views.DrawShadowFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:shadowDrawable="@drawable/bottom_shadow">
+
+        <ScrollView
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </lrstudios.games.ego.lib.views.DrawShadowFrameLayout>
 </LinearLayout>

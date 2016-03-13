@@ -39,20 +39,11 @@ public class BetterFragmentActivity extends AppCompatActivity {
     private ProgressBar _progressIndicator;
 
 
-    protected boolean useToolbar() {
-        return false;
-    }
-
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            if (useToolbar())
-                setSupportActionBar(toolbar);
-            else
-                toolbar.setVisibility(View.GONE);
-        }
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         _progressIndicator = (ProgressBar) findViewById(R.id.progress_indicator);

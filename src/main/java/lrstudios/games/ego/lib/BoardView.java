@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -50,12 +51,6 @@ import lrstudios.games.ego.lib.util.GoUtils;
 import lrstudios.util.android.AndroidUtils;
 
 
-/**
- * Displays a go board.<p>
- *
- * There are no functions to manipulate the go board in the view. It's only a visual
- * representation of a board and any board manipulation is done outside of this class.
- */
 public final class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = BoardView.class.getSimpleName();
 
