@@ -19,6 +19,7 @@
 package lrstudios.util.android.ui;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import lrstudios.games.ego.lib.R;
+import lrstudios.games.ego.lib.views.DrawShadowFrameLayout;
 import lrstudios.util.android.AndroidUtils;
 
 
@@ -47,6 +49,12 @@ public class BetterFragmentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         _progressIndicator = (ProgressBar) findViewById(R.id.progress_indicator);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            DrawShadowFrameLayout toolbarShadow = (DrawShadowFrameLayout) findViewById(R.id.toolbar_shadow_overlay);
+            if (toolbarShadow != null)
+                toolbarShadow.setShadowVisible(false, false);
+        }
     }
 
     @Override
