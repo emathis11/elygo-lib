@@ -60,6 +60,17 @@ public class AndroidUtils {
         return version;
     }
 
+    public static int getAppVersionCode(PackageManager packageManager, String packageName) {
+        try {
+            if (packageManager != null)
+                return packageManager.getPackageInfo(packageName, 0).versionCode;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static boolean assetExists(Context context, String path) {
         try {
             Utils.closeObject(context.getAssets().open(path));
