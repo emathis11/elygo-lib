@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
+
 import lrstudios.games.ego.lib.GoBoard;
 import lrstudios.games.ego.lib.IntentGameInfo;
 import lrstudios.games.ego.lib.R;

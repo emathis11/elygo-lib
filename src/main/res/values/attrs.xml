@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="detailedSeekBar_titleStyle" format="reference" />
     <attr name="detailedSeekBar_descriptionStyle" format="reference" />

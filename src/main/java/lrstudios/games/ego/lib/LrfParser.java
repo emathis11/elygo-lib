@@ -18,16 +18,16 @@
 
 package lrstudios.games.ego.lib;
 
-import lrstudios.util.Rect;
-import lrstudios.util.io.BitReader;
-import lrstudios.util.io.BitWriter;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import lrstudios.util.Rect;
+import lrstudios.util.io.BitReader;
+import lrstudios.util.io.BitWriter;
 
 /**
  * Provides methods to parse and save LRF files from/to an instance of GoGame.

@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="dialog_about_items_spacing">15dp</dimen>
+
     <dimen name="form_small_button_height">48dp</dimen>
     <dimen name="form_button_heignt">56dp</dimen>
     <dimen name="form_button_margin">6dp</dimen>

@@ -18,6 +18,10 @@
     <string name="loading">Loading…</string>
 
     <string name="preferences_title">Settings</string>
+    <string name="dialog_about_message">
+        If you have any questions, suggestions, or bug reports, feel free to contact me.
+    </string>
+    <string name="dialog_about_send_email">E-mail</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Pass</string>

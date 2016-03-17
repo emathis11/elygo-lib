@@ -17,6 +17,10 @@
     <string name="loading">Chargement…</string>
 
     <string name="preferences_title">Paramètres</string>
+    <string name="dialog_about_message">
+        Si vous avez des questions, suggestions, ou si vous trouvez un bug, n\'hésitez pas à me contacter.
+    </string>
+    <string name="dialog_about_send_email">E-mail</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Passer</string>

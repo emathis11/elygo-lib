@@ -33,7 +33,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -205,12 +204,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (!isInEditMode())
-            readPreferences();
+        if (isInEditMode())
+            return;
 
+        readPreferences();
         _stdBitmapPaint = new Paint();
         _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
-
         getHolder().setFormat(PixelFormat.TRANSPARENT);
         getHolder().addCallback(this);
     }

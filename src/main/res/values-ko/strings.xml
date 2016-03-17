@@ -19,6 +19,8 @@
     <string name="loading">불러오는 중...</string>
 
     <string name="preferences_title">설정</string>
+    <string name="dialog_about_message">LR Studios 게임</string>
+    <string name="dialog_about_send_email">이메일</string>
 
     <!-- Action Bar -->
 <string name="ab_pass">Pass</string>

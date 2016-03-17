@@ -18,6 +18,10 @@
     <string name="loading">読み込んでいます…</string>
 
     <string name="preferences_title">設定</string>
+    <string name="dialog_about_message">
+        質問、提案、バグ報告等がございましたら、お気軽にご連絡ください。
+    </string>
+    <string name="dialog_about_send_email">メール</string>
 
         <!-- Action Bar -->
     <string name="ab_pass">パス</string>

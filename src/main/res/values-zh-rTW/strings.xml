@@ -18,6 +18,8 @@
     <string name="loading">載入中...</string>
 
     <string name="preferences_title">設置</string>
+    <string name="dialog_about_message" />
+    <string name="dialog_about_send_email">電子郵件</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Pass</string>

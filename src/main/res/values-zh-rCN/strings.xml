@@ -18,6 +18,8 @@
     <string name="loading">正在加载…</string>
 
     <string name="preferences_title">设置</string>
+    <string name="dialog_about_message" />
+    <string name="dialog_about_send_email">电子邮件 (英语)</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Pass</string>

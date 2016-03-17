@@ -24,20 +24,22 @@
                 android:id="@+id/btn_play_start"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/form_button_heignt"
-                android:background="@drawable/__btn_green_holo_light"
                 android:text="@string/gtp_start_game"
                 android:textAppearance="@style/FormButtonText"
                 android:layout_marginRight="6dp"
-                android:layout_weight=".50" />
+                android:layout_weight=".50"
+                android:theme="@style/Button_BottomBar"
+                style="@style/Widget.AppCompat.Button.Colored" />
 
             <Button
                 android:id="@+id/btn_play_continue"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/form_button_heignt"
-                android:background="@drawable/__btn_default_holo_light"
                 android:text="@string/gtp_resume_game"
-                android:textAppearance="@style/FormButtonText"
-                android:layout_weight=".50" />
+                android:layout_weight=".50"
+                android:textColor="#000"
+                android:theme="@style/Button_BottomBar"
+                style="@style/Widget.AppCompat.Button" />
         </LinearLayout>
 
         <LinearLayout
