@@ -579,6 +579,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void onDraw(Canvas canvas) {
+        if (isInEditMode())
+            return;
         // Background
         _theme.drawBackground(canvas, 0, 0, _surfaceWidth, _surfaceHeight);
 

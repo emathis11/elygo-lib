@@ -3,7 +3,7 @@
 
     <dimen name="form_small_button_height">48dp</dimen>
     <dimen name="form_button_heignt">56dp</dimen>
-    <dimen name="form_button_margin">6dp</dimen>
+    <dimen name="button_bottom_margin">10dp</dimen>
 
     <dimen name="prisoners_view_stone_size">30dp</dimen>
     <dimen name="boardview_answer_circle_radius">4dp</dimen>

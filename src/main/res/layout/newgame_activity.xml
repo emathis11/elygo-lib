@@ -28,8 +28,7 @@
                 android:textAppearance="@style/FormButtonText"
                 android:layout_marginRight="6dp"
                 android:layout_weight=".50"
-                android:theme="@style/Button_BottomBar"
-                style="@style/Widget.AppCompat.Button.Colored" />
+                style="@style/BigBottomButton" />
 
             <Button
                 android:id="@+id/btn_play_continue"
@@ -37,9 +36,7 @@
                 android:layout_height="@dimen/form_button_heignt"
                 android:text="@string/gtp_resume_game"
                 android:layout_weight=".50"
-                android:textColor="#000"
-                android:theme="@style/Button_BottomBar"
-                style="@style/Widget.AppCompat.Button" />
+                android:textColor="#000" />
         </LinearLayout>
 
         <LinearLayout
