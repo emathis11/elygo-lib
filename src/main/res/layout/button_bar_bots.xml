@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/button_bar"
+    android:orientation="horizontal"
+    style="@style/ButtonBar">
+
+    <ImageButton
+        android:id="@+id/btn_undo"
+        android:src="@drawable/ic_action_undo"
+        android:contentDescription="@string/ab_undo"
+        style="@style/ButtonBar_ImageButton" />
+
+    <Button
+        android:id="@+id/btn_pass"
+        android:text="@string/ab_pass"
+        style="@style/ButtonBar_ButtonText" />
+
+    <ImageButton
+        android:id="@+id/btn_save"
+        android:src="@drawable/ic_action_save"
+        android:contentDescription="@string/save"
+        style="@style/ButtonBar_ImageButton" />
+</LinearLayout>

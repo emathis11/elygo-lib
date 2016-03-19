@@ -1,150 +1,146 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    
-    <include layout="@layout/toolbar_with_progress" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <include layout="@layout/toolbar_with_progress"/>
+
+    <lrstudios.games.ego.lib.views.DrawShadowFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:shadowDrawable="@drawable/bottom_shadow">
 
-        <LinearLayout
-            android:id="@+id/footer"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bottom_bar_bg"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:weightSum="1.0">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_play_start"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/form_button_heignt"
-                android:text="@string/gtp_start_game"
-                android:textAppearance="@style/FormButtonText"
-                android:layout_marginRight="6dp"
-                android:layout_weight=".50"
-                style="@style/BigBottomButton" />
+            <LinearLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_play_continue"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/form_button_heignt"
-                android:text="@string/gtp_resume_game"
-                android:layout_weight=".50"
-                android:textColor="#000" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_play_start"
+                    style="@style/BigBottomButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".50"
+                    android:layout_marginRight="0dp"
+                    android:text="@string/gtp_start_game"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_above="@id/footer">
+                <Button
+                    android:id="@+id/btn_play_continue"
+                    style="@style/BigBottomButton_Normal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".50"
+                    android:text="@string/gtp_resume_game"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="6dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:baselineAligned="false"
-                android:weightSum="1.0">
+                android:layout_height="match_parent"
+                android:layout_above="@id/footer"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:layout_weight=".50">
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="6dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:text="@string/boardsize"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <Spinner
-                        android:id="@+id/spn_play_boardsize"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:drawSelectorOnTop="true"
-                        android:entries="@array/playBoardsize" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/boardsize"
+                            android:textAppearance="@style/GtpNewGame_Title"/>
+
+                        <Spinner
+                            android:id="@+id/spn_play_boardsize"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
+                            android:entries="@array/playBoardsize"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/komi"
+                            android:textAppearance="@style/GtpNewGame_Title"/>
+
+                        <Spinner
+                            android:id="@+id/spn_play_komi"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
+                            android:entries="@array/playKomi"/>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:layout_weight=".50">
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/gtp_player_color"
+                    android:textAppearance="@style/GtpNewGame_Title"/>
 
-                    <TextView
-                        android:text="@string/komi"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <Spinner
-                        android:id="@+id/spn_play_komi"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:drawSelectorOnTop="true"
-                        android:entries="@array/playKomi" />
-                </LinearLayout>
+                <Spinner
+                    android:id="@+id/spn_play_color"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:entries="@array/playColor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/gtp_bot_level"
+                    android:textAppearance="@style/GtpNewGame_Title"/>
+
+                <Spinner
+                    android:id="@+id/spn_play_level"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:entries="@array/playLevels"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/handicap"
+                    android:textAppearance="@style/GtpNewGame_Title"/>
+
+                <Spinner
+                    android:id="@+id/spn_play_handicap"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:entries="@array/playHandicap"/>
             </LinearLayout>
-
-            <TextView
-                android:text="@string/gtp_player_color"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Spinner
-                android:id="@+id/spn_play_color"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:drawSelectorOnTop="true"
-                android:entries="@array/playColor" />
-
-            <TextView
-                android:text="@string/gtp_bot_level"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Spinner
-                android:id="@+id/spn_play_level"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:drawSelectorOnTop="true"
-                android:entries="@array/playLevels" />
-
-            <TextView
-                android:text="@string/handicap"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Spinner
-                android:id="@+id/spn_play_handicap"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:drawSelectorOnTop="true"
-                android:entries="@array/playHandicap" />
-        </LinearLayout>
-    </RelativeLayout>
+        </RelativeLayout>
+    </lrstudios.games.ego.lib.views.DrawShadowFrameLayout>
 </LinearLayout>

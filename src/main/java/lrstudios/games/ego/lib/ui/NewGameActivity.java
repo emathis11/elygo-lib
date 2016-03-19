@@ -32,7 +32,6 @@ import lrstudios.games.ego.lib.R;
 import lrstudios.games.ego.lib.UpdatePrefsTask;
 import lrstudios.util.android.ui.BetterFragmentActivity;
 
-
 /**
  * Allows to start a game against a bot.
  */
@@ -53,12 +52,10 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
             _PREF_LEVEL = "newgame_level",
             _PREF_HANDICAP = "newgame_handicap";
 
-
     /**
      * This method should return the {@link Class} of the desired bot.
      */
     protected abstract Class<?> getBotClass();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +82,6 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
         _updateButtons();
     }
-
 
     @Override
     public void onClick(View v) {
@@ -141,13 +137,11 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         _updateButtons();
     }
-
 
     private void _updateButtons() {
         // Disable "Resume" button if there is no game saved

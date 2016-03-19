@@ -27,6 +27,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -50,8 +51,7 @@ import lrstudios.games.ego.lib.R;
 import lrstudios.games.ego.lib.ScoreView;
 import lrstudios.games.ego.lib.Utils;
 
-
-public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener {
+public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener, View.OnClickListener {
     private static final String TAG = "GtpBoardActivity";
 
     public static final int
@@ -69,6 +69,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     private GtpEngine _engine;
     private ProgressDialog _waitingScoreDialog;
 
+    private View _btnUndo;
+    private View _btnPass;
+    private View _btnSave;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,12 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         setContentView(R.layout.board_activity);
 
         _scoreView = (ScoreView) findViewById(R.id.score_view);
+        _btnUndo = findViewById(R.id.btn_undo);
+        _btnPass = findViewById(R.id.btn_pass);
+        _btnSave = findViewById(R.id.btn_save);
+        _btnUndo.setOnClickListener(this);
+        _btnPass.setOnClickListener(this);
+        _btnSave.setOnClickListener(this);
 
         final Bundle extras = getIntent().getExtras();
         IntentGameInfo gameInfo = extras.getParcelable(INTENT_GAME_INFO);
@@ -92,8 +102,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _gtpThread.quit();
             try {
                 _gtpThread.join(); // TODO show a ProgressDialog
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -101,8 +110,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         Class<?> botClass = (Class<?>) extras.getSerializable(INTENT_GTP_BOT_CLASS);
         try {
             _engine = (GtpEngine) botClass.getConstructor(Context.class).newInstance(this);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             showToast(R.string.err_internal);
             finish();
@@ -117,13 +125,11 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 stream = openFileInput("gtp_save.sgf");
                 restoredGame = GoGame.loadSgf(stream)[0];
                 boardSize = restoredGame.info.boardSize;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 restoredGame = null;
                 showToast(R.string.err_cannot_restore_game);
-            }
-            finally {
+            } finally {
                 Utils.closeObject(stream);
             }
         }
@@ -194,7 +200,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         getMenuInflater().inflate(R.menu.actionbar_gtp_board, menu);
 
         if (_engine.getGame().getCurrentNode().parentNode == null)
-            disableOptionItem(R.id.menu_undo);
+            _btnUndo.setEnabled(false);
         return true;
     }
 
@@ -202,12 +208,20 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
-        if (id == R.id.menu_undo) {
+        if (id == R.id.menu_settings)
+            startActivityForResult(new Intent(this, Preferences.class), BaseBoardActivity.CODE_PREFERENCES_ACTIVITY);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_undo) {
             _engine.undo(true);
             _updatePrisoners();
             _updateGameLogic();
         }
-        else if (id == R.id.menu_save) {
+        else if (id == R.id.btn_save) {
             // Give a default name to the game : "BotName_MonthDay_HoursMinutes"
             Calendar calendar = new GregorianCalendar();
             String defaultName = String.format("%s_%02d%02d_%02d%02d",
@@ -219,15 +233,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
             _showSaveDialog(_engine.getGame(), defaultName, true);
         }
-        else if (id == R.id.menu_pass) {
+        else if (id == R.id.btn_pass) {
             onPress(-1, -1);
         }
-        else if (id == R.id.menu_settings) {
-            startActivityForResult(new Intent(this, Preferences.class), BaseBoardActivity.CODE_PREFERENCES_ACTIVITY);
-        }
-        return true;
     }
-
 
     @Override
     public void onPress(int x, int y) {
@@ -245,7 +254,6 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     public void onCursorMoved(int x, int y) {
     }
 
-
     private void _updateGameLogic() {
         GoGame game = _engine.getGame();
 
@@ -259,8 +267,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _waitingScoreDialog.setMessage(getString(R.string.board_compute_territory));
             try {
                 _waitingScoreDialog.show();
-            }
-            catch (WindowManager.BadTokenException e) // Happens if the activity is not visible
+            } catch (WindowManager.BadTokenException e) // Happens if the activity is not visible
             {
                 e.printStackTrace();
             }
@@ -279,19 +286,18 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         _boardView.invalidate();
     }
 
-
     protected void _lockPlaying() {
         _boardView.lockPlaying();
-        disableOptionItem(R.id.menu_undo);
-        disableOptionItem(R.id.menu_pass);
+        _btnUndo.setEnabled(false);
+        _btnPass.setEnabled(false);
     }
 
     protected void _unlockPlaying() {
         _boardView.unlockPlaying();
         GoGame game = _engine.getGame();
         boolean isFinished = game.getCurrentNode().x >= -1 && !game.isFinished();
-        setOptionItemEnabled(R.id.menu_undo, isFinished);
-        setOptionItemEnabled(R.id.menu_pass, isFinished);
+        _btnUndo.setEnabled(isFinished);
+        _btnPass.setEnabled(isFinished);
     }
 
     protected void _updatePrisoners() {
@@ -324,7 +330,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                     _updatePrisoners();
                 }
                 else {
-                    Log.e(TAG, "invalid move coordinates : " + move);
+                    Log.e(TAG, "Invalid move coordinates : " + move);
                 }
 
                 setProgressIndicatorVisibility(false);
@@ -342,8 +348,8 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 String winner = getString(result.getWinner() == GoGameResult.BLACK ? R.string.black : R.string.white);
                 setTitle(getString(R.string.gtp_game_result,
                         winner, new DecimalFormat("#0.#").format(result.getScore())));
-                disableOptionItem(R.id.menu_undo);
-                disableOptionItem(R.id.menu_pass);
+                _btnUndo.setEnabled(false);
+                _btnPass.setEnabled(false);
             }
         }
     }
